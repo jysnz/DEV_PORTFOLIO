@@ -2,6 +2,7 @@ export interface Project {
   title: string;
   description: string;
   tag?: string;
+  image_url?: string;
   info: ProjectInfo[];
   links: ProjectLink[];
   repositories?: Repository[];
@@ -28,6 +29,11 @@ export interface Achievement {
   description: string;
   year: string;
   location?: string;
+}
+
+export interface TechItem {
+  name: string;
+  category: "frontend" | "backend" | "mobile" | "tools" | "database";
 }
 
 export interface NavLink {

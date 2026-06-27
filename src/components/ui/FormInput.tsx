@@ -18,13 +18,13 @@ export function FormInput({
   className,
 }: FormInputProps) {
   const inputStyles =
-    "w-full bg-bg-input rounded-sm px-4 py-3 text-lg text-text-primary font-body border border-transparent placeholder:text-text-secondary/40 transition-all duration-200 hover:border-border focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50";
+    "w-full glass rounded-xl px-4 py-3.5 text-base text-text-primary font-body placeholder:text-text-secondary/40 transition-all duration-300 focus:border-accent/40 focus:shadow-[0_0_20px_rgba(195,177,255,0.1)] focus:outline-none hover:border-white/15";
 
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       <label
         htmlFor={name}
-        className="text-text-secondary text-base font-medium font-body leading-relaxed"
+        className="text-text-secondary text-sm font-medium font-body leading-relaxed"
       >
         {label}
         {required && <span className="text-accent ml-1">*</span>}

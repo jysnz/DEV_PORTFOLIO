@@ -16,7 +16,7 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "Jayson Dela Cruz | Developer Portfolio",
   description:
-    "A 4th-year information technology student. An aspiring full-stack developer.",
+    "A 4th-year information technology student. An aspiring full-stack developer and Philippine representative in the VEX Robotics World Championship.",
 };
 
 export default function RootLayout({
@@ -28,8 +28,16 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${bebasNeue.variable} ${manrope.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-body bg-bg-primary text-text-primary">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);document.addEventListener('DOMContentLoaded',function(){document.documentElement.classList.add('smooth-scroll')})`,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col font-body bg-bg-primary text-text-primary noise-overlay overflow-x-hidden">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-accent focus:text-text-dark focus:rounded-full focus:font-bold"

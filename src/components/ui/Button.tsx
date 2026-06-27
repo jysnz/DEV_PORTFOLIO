@@ -19,19 +19,21 @@ export function Button({
   onClick,
 }: ButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center h-[54px] rounded-full bg-accent text-text-dark font-body font-bold text-base uppercase transition-all duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.98]";
+    "group inline-flex items-center justify-center h-[52px] rounded-full font-body font-bold text-sm uppercase tracking-wide transition-all duration-300";
 
   const variantStyles = {
-    primary: "pl-6 pr-1.5 gap-3",
-    submit: "px-10",
+    primary:
+      "bg-accent text-text-dark pl-6 pr-1.5 gap-3 hover:shadow-[0_0_30px_rgba(195,177,255,0.4)] hover:scale-[1.03] active:scale-[0.98]",
+    submit:
+      "bg-accent text-text-dark px-8 hover:shadow-[0_0_30px_rgba(195,177,255,0.4)] hover:scale-[1.03] active:scale-[0.98]",
   };
 
   const content = (
     <>
       <span>{children}</span>
       {variant === "primary" && (
-        <span className="flex items-center justify-center size-[42px] rounded-full bg-text-dark/15">
-          <ArrowUpRightIcon className="size-5 text-text-dark" />
+        <span className="flex items-center justify-center size-[38px] rounded-full bg-text-dark/15 transition-transform duration-300 group-hover:rotate-45">
+          <ArrowUpRightIcon className="size-4 text-text-dark" />
         </span>
       )}
     </>

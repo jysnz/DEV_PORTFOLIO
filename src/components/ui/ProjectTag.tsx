@@ -9,10 +9,11 @@ export function ProjectTag({ children, className }: ProjectTagProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center justify-center px-4 py-2 rounded-full bg-bg-tag text-text-primary font-body font-medium text-sm leading-normal",
+        "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full glass-accent text-accent font-body font-medium text-xs uppercase tracking-wider",
         className
       )}
     >
+      <span className="size-1.5 rounded-full bg-accent" />
       {children}
     </span>
   );

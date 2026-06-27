@@ -2,25 +2,37 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { navLinks, siteConfig } from "@/lib/data";
+import { GradualBlur } from "@/components/ui/GradualBlur";
 import { MenuIcon, CloseIcon } from "@/assets/icons";
+import type { NavLink } from "@/lib/types";
 
 export interface NavbarProps {
+  navLinks: NavLink[];
+  siteName: string;
   className?: string;
 }
 
-export function Navbar({ className }: NavbarProps) {
+export function Navbar({ navLinks, siteName, className }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Set initial scroll state immediately without transition
+    setScrolled(window.scrollY > 20);
+
     const handleScroll = () => setScrolled(window.scrollY > 20);
-    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    // Delay enabling transitions so the initial state renders without animation
+    const timer = setTimeout(() => setMounted(true), 100);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timer);
+    };
   }, []);
 
-  // Close mobile menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) setIsOpen(false);
@@ -32,31 +44,29 @@ export function Navbar({ className }: NavbarProps) {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled
-          ? "bg-bg-primary/95 backdrop-blur-md border-b border-border/50"
-          : "bg-transparent",
+        "fixed top-0 left-0 right-0 z-50",
+        mounted ? "transition-all duration-500" : "",
+        "glass-strong shadow-lg shadow-black/10",
         className
       )}
     >
       <nav
         aria-label="Main navigation"
-        className="flex items-center justify-between px-6 md:px-[60px] py-6 max-w-[1440px] mx-auto"
+        className="flex items-center justify-between px-6 md:px-[60px] py-5 max-w-[1440px] mx-auto"
       >
         <a
           href="#home"
-          className="font-display text-[32px] leading-normal text-text-secondary tracking-tight transition-colors duration-150 hover:text-text-primary"
+          className="font-display text-[32px] leading-normal text-gradient tracking-tight"
         >
-          {siteConfig.name}
+          {siteName}
         </a>
 
-        {/* Desktop nav */}
-        <ul className="hidden lg:flex items-center gap-8">
+        <ul className="hidden lg:flex items-center gap-1">
           {navLinks.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
-                className="relative text-text-secondary font-body font-medium text-base leading-relaxed transition-colors duration-150 hover:text-accent after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-200 hover:after:w-full"
+                className="relative px-4 py-2 rounded-full text-text-secondary font-body font-medium text-sm leading-relaxed transition-all duration-200 hover:text-text-primary hover:bg-white/5"
               >
                 {link.label}
               </a>
@@ -64,33 +74,31 @@ export function Navbar({ className }: NavbarProps) {
           ))}
         </ul>
 
-        {/* Mobile menu button */}
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
-          className="lg:hidden text-text-secondary p-2 rounded-lg transition-colors duration-150 hover:text-text-primary hover:bg-bg-icon"
+          className="lg:hidden text-text-secondary p-2.5 rounded-xl transition-all duration-200 hover:text-text-primary hover:bg-white/5"
         >
           {isOpen ? <CloseIcon /> : <MenuIcon />}
         </button>
       </nav>
 
-      {/* Mobile nav */}
       <div
         className={cn(
           "lg:hidden overflow-hidden transition-all duration-300 ease-out",
-          isOpen ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
+          isOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
         )}
       >
-        <div className="bg-bg-primary/95 backdrop-blur-md border-t border-border/50">
-          <ul className="flex flex-col px-6 py-4 gap-1">
+        <div className="glass-strong mx-4 mb-4 rounded-2xl">
+          <ul className="flex flex-col p-4 gap-1">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="block text-text-secondary font-body font-medium text-lg py-3 px-4 rounded-lg transition-colors duration-150 hover:text-accent hover:bg-bg-icon/50"
+                  className="block text-text-secondary font-body font-medium text-base py-3 px-4 rounded-xl transition-all duration-200 hover:text-text-primary hover:bg-white/5"
                 >
                   {link.label}
                 </a>
@@ -99,6 +107,15 @@ export function Navbar({ className }: NavbarProps) {
           </ul>
         </div>
       </div>
+      <GradualBlur
+        position="bottom"
+        height="2.5rem"
+        strength={2}
+        divCount={6}
+        curve="ease-out"
+        target="page"
+        zIndex={40}
+      />
     </header>
   );
 }
