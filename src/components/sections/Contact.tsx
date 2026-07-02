@@ -18,14 +18,14 @@ export function Contact() {
         <div className="flex flex-col justify-between lg:flex-1 lg:min-w-0 gap-16">
           <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-4">
-              <h2 className="font-display text-[40px] md:text-[56px] lg:text-[76px] leading-none text-text-primary">
+              <h2 className="font-display text-[40px] md:text-[56px] lg:text-[76px] leading-none text-ink">
                 Let&apos;s connect
               </h2>
-              <p className="font-body font-normal text-base lg:text-lg leading-relaxed text-text-secondary">
+              <p className="font-body font-normal text-base lg:text-lg leading-relaxed text-ink-muted">
                 Say hello at{" "}
                 <a
                   href={`mailto:${siteConfig.email}`}
-                  className="text-text-primary underline underline-offset-4 decoration-accent/50 transition-all duration-150 hover:text-accent hover:decoration-accent"
+                  className="text-ink underline underline-offset-4 decoration-accent/50 transition-all duration-150 hover:text-accent hover:decoration-accent"
                 >
                   {siteConfig.email}
                 </a>
@@ -46,7 +46,7 @@ export function Contact() {
                   aria-label={label}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-text-secondary transition-all duration-200 hover:text-accent hover:scale-110"
+                  className="text-ink-muted transition-all duration-200 hover:text-accent hover:scale-110"
                 >
                   <Icon className="size-8" />
                 </a>
@@ -66,10 +66,10 @@ export function Contact() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <p className="font-body font-medium text-xl text-text-primary">
+              <p className="font-body font-medium text-xl text-ink">
                 Message sent!
               </p>
-              <p className="font-body text-text-secondary">
+              <p className="font-body text-ink-muted">
                 Thanks for reaching out. I&apos;ll get back to you soon.
               </p>
             </div>

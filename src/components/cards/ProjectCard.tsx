@@ -3,7 +3,9 @@
 import { cn } from "@/lib/utils";
 import { ProjectTag } from "@/components/ui/ProjectTag";
 import { LinkButton } from "@/components/ui/LinkButton";
-import { TiltCard } from "@/components/3d/TiltCard";
+import { useRoughShape } from "@/hooks/useRoughShape";
+import { SketchBorder } from "@/components/sketch/SketchBorder";
+import { CrossHatchOverlay } from "@/components/sketch/CrossHatchOverlay";
 import type { Project } from "@/lib/types";
 
 export interface ProjectCardProps {
@@ -12,69 +14,77 @@ export interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, className }: ProjectCardProps) {
+  const { containerRef, svgRef, emphasisSvgRef, ready } = useRoughShape<HTMLElement>({
+    radius: 12,
+    withEmphasis: true,
+  });
+
   return (
-    <TiltCard tiltAmount={3}>
-      <article
-        className={cn(
-          "flex flex-col gap-8 p-6 lg:p-10 bg-bg-card rounded-md border border-border/30",
-          className
-        )}
-      >
-        {/* Header with tag */}
-        {project.tag && (
-          <div>
-            <ProjectTag>{project.tag}</ProjectTag>
-          </div>
-        )}
+    <article
+      ref={containerRef}
+      className={cn(
+        "group relative flex flex-col gap-8 p-6 lg:p-10 bg-paper-card rounded-md border transition-transform duration-200 hover:-translate-y-0.5 hover:-rotate-[0.3deg]",
+        ready ? "border-transparent" : "border-line/30",
+        className
+      )}
+    >
+      <SketchBorder svgRef={svgRef} emphasisSvgRef={emphasisSvgRef} hoverEmphasis />
+      <CrossHatchOverlay />
 
-        {/* Title and description */}
-        <div className="flex flex-col gap-3 lg:gap-4">
-          <h3 className="font-body font-medium text-xl md:text-2xl lg:text-[32px] leading-[1.4] text-text-primary">
-            {project.title}
-          </h3>
-          <p className="font-body font-normal text-base lg:text-lg leading-relaxed text-text-secondary">
-            {project.description}
-          </p>
+      {/* Header with tag */}
+      {project.tag && (
+        <div className="relative">
+          <ProjectTag>{project.tag}</ProjectTag>
         </div>
+      )}
 
-        {/* Project info */}
-        <div className="flex flex-col gap-4">
-          <h4 className="font-body font-semibold text-base leading-normal text-text-primary uppercase tracking-wide">
-            Project Info
-          </h4>
-          <dl className="border-b border-border">
-            {project.info.map((item) => (
-              <div
-                key={item.topic}
-                className="flex items-center justify-between py-4 border-t border-border"
-              >
-                <dt className="font-body font-medium text-base leading-relaxed text-text-primary">
-                  {item.topic}
-                </dt>
-                <dd className="font-body font-medium text-base leading-relaxed text-text-secondary">
-                  {item.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+      {/* Title and description */}
+      <div className="relative flex flex-col gap-3 lg:gap-4">
+        <h3 className="font-body font-medium text-xl md:text-2xl lg:text-[32px] leading-[1.4] text-ink">
+          {project.title}
+        </h3>
+        <p className="font-body font-normal text-base lg:text-lg leading-relaxed text-ink-muted">
+          {project.description}
+        </p>
+      </div>
 
-        {/* Links */}
-        <div className="flex flex-wrap items-start gap-6">
-          {project.links.map((link) => (
-            <LinkButton key={link.label} href={link.href} type={link.type}>
-              {link.label}
-            </LinkButton>
+      {/* Project info */}
+      <div className="relative flex flex-col gap-4">
+        <h4 className="font-accent text-lg leading-normal text-ink uppercase tracking-wide">
+          Project Info
+        </h4>
+        <dl className="border-b border-line">
+          {project.info.map((item) => (
+            <div
+              key={item.topic}
+              className="flex items-center justify-between py-4 border-t border-line"
+            >
+              <dt className="font-body font-medium text-base leading-relaxed text-ink">
+                {item.topic}
+              </dt>
+              <dd className="font-body font-medium text-base leading-relaxed text-ink-muted">
+                {item.value}
+              </dd>
+            </div>
           ))}
-          {project.repositories && project.repositories.length > 0 &&
-            project.repositories.map((repo) => (
-              <LinkButton key={repo.label} href={repo.href} type="github">
-                {repo.label}
-              </LinkButton>
-            ))
-          }
-        </div>
-      </article>
-    </TiltCard>
+        </dl>
+      </div>
+
+      {/* Links */}
+      <div className="relative flex flex-wrap items-start gap-6">
+        {project.links.map((link) => (
+          <LinkButton key={link.label} href={link.href} type={link.type}>
+            {link.label}
+          </LinkButton>
+        ))}
+        {project.repositories && project.repositories.length > 0 &&
+          project.repositories.map((repo) => (
+            <LinkButton key={repo.label} href={repo.href} type="github">
+              {repo.label}
+            </LinkButton>
+          ))
+        }
+      </div>
+    </article>
   );
 }

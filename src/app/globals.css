@@ -1,18 +1,40 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
-  --color-bg-primary: #1E0031;
-  --color-bg-card: #1A1A1A;
-  --color-bg-input: #1A1A1A;
-  --color-bg-icon: #222222;
-  --color-bg-tag: #0A0A0A;
-  --color-text-primary: #FFFFFF;
-  --color-text-secondary: #C7C7C7;
-  --color-text-dark: #0A0A0A;
-  --color-accent: #C3B1FF;
-  --color-border: #484848;
-  --font-display: "Bebas Neue", cursive;
-  --font-body: "Manrope", sans-serif;
+:root {
+  --paper-bg: #F5F1E8;
+  --paper-card: #FAF7EF;
+  --paper-input: #EFEAD9;
+  --graphite-ink: #3A3A3A;
+  --graphite-muted: #5C5850;
+  --accent-pencil: #C0392B;
+  --accent-pencil-contrast: #FFFFFF;
+  --line-color: #3A3A3A;
+}
+
+.dark {
+  --paper-bg: #1E1C1A;
+  --paper-card: #26231F;
+  --paper-input: #2A2622;
+  --graphite-ink: #E8E4DA;
+  --graphite-muted: #B8B2A6;
+  --accent-pencil: #E0574A;
+  --accent-pencil-contrast: #1E1C1A;
+  --line-color: #E8E4DA;
+}
+
+@theme inline {
+  --color-paper-bg: var(--paper-bg);
+  --color-paper-card: var(--paper-card);
+  --color-paper-input: var(--paper-input);
+  --color-ink: var(--graphite-ink);
+  --color-ink-muted: var(--graphite-muted);
+  --color-accent: var(--accent-pencil);
+  --color-accent-contrast: var(--accent-pencil-contrast);
+  --color-line: var(--line-color);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-accent: var(--font-accent);
   --radius-sm: 4px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -26,20 +48,37 @@ html {
 }
 
 body {
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background-color: var(--color-paper-bg);
+  color: var(--color-ink);
 }
 
 /* Selection highlight */
 ::selection {
-  background-color: #c3b1ff40;
-  color: var(--color-text-primary);
+  background-color: color-mix(in srgb, var(--color-accent) 25%, transparent);
+  color: var(--color-ink);
 }
 
 /* Focus visible reset for better a11y */
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+/* Desaturated / pencil-sketch photo treatment */
+.pencil-photo {
+  filter: grayscale(0.85) sepia(0.12) contrast(1.1) saturate(0.5);
+}
+
+/* Redraw-on-hover underline (LinkButton) */
+.sketch-underline-path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.35s ease-out;
+}
+
+.group:hover .sketch-underline-path,
+.group:focus-visible .sketch-underline-path {
+  stroke-dashoffset: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -40,3 +40,9 @@ export interface SocialLink {
   href: string;
   icon: "linkedin" | "github" | "twitter" | "instagram";
 }
+
+export interface AboutDescription {
+  headline: string;
+  body: string;
+  skills: string[];
+}

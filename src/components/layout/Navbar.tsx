@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { navLinks, siteConfig } from "@/lib/data";
 import { MenuIcon, CloseIcon } from "@/assets/icons";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export interface NavbarProps {
   className?: string;
@@ -34,7 +35,7 @@ export function Navbar({ className }: NavbarProps) {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         scrolled
-          ? "bg-bg-primary/95 backdrop-blur-md border-b border-border/50"
+          ? "bg-paper-bg/95 backdrop-blur-md border-b border-line/50"
           : "bg-transparent",
         className
       )}
@@ -45,7 +46,7 @@ export function Navbar({ className }: NavbarProps) {
       >
         <a
           href="#home"
-          className="font-display text-[32px] leading-normal text-text-secondary tracking-tight transition-colors duration-150 hover:text-text-primary"
+          className="font-display text-[32px] leading-normal text-ink-muted tracking-tight transition-colors duration-150 hover:text-ink"
         >
           {siteConfig.name}
         </a>
@@ -56,7 +57,7 @@ export function Navbar({ className }: NavbarProps) {
             <li key={link.href}>
               <a
                 href={link.href}
-                className="relative text-text-secondary font-body font-medium text-base leading-relaxed transition-colors duration-150 hover:text-accent after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-200 hover:after:w-full"
+                className="relative text-ink-muted font-body font-medium text-base leading-relaxed transition-colors duration-150 hover:text-accent after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-200 hover:after:w-full"
               >
                 {link.label}
               </a>
@@ -64,16 +65,20 @@ export function Navbar({ className }: NavbarProps) {
           ))}
         </ul>
 
-        {/* Mobile menu button */}
-        <button
-          type="button"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label={isOpen ? "Close menu" : "Open menu"}
-          aria-expanded={isOpen}
-          className="lg:hidden text-text-secondary p-2 rounded-lg transition-colors duration-150 hover:text-text-primary hover:bg-bg-icon"
-        >
-          {isOpen ? <CloseIcon /> : <MenuIcon />}
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+
+          {/* Mobile menu button */}
+          <button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
+            className="lg:hidden text-ink-muted p-2 rounded-lg transition-colors duration-150 hover:text-ink hover:bg-paper-input"
+          >
+            {isOpen ? <CloseIcon /> : <MenuIcon />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile nav */}
@@ -83,14 +88,14 @@ export function Navbar({ className }: NavbarProps) {
           isOpen ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
         )}
       >
-        <div className="bg-bg-primary/95 backdrop-blur-md border-t border-border/50">
+        <div className="bg-paper-bg/95 backdrop-blur-md border-t border-line/50">
           <ul className="flex flex-col px-6 py-4 gap-1">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="block text-text-secondary font-body font-medium text-lg py-3 px-4 rounded-lg transition-colors duration-150 hover:text-accent hover:bg-bg-icon/50"
+                  className="block text-ink-muted font-body font-medium text-lg py-3 px-4 rounded-lg transition-colors duration-150 hover:text-accent hover:bg-paper-input/50"
                 >
                   {link.label}
                 </a>

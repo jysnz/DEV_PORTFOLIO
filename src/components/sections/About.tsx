@@ -1,5 +1,6 @@
 import { Section } from "@/components/layout/Section";
 import { LinkButton } from "@/components/ui/LinkButton";
+import { ProjectTag } from "@/components/ui/ProjectTag";
 import { aboutDescription } from "@/lib/data";
 
 export function About() {
@@ -8,19 +9,24 @@ export function About() {
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
         {/* Title */}
         <div className="lg:w-[45%] shrink-0">
-          <h2 className="font-display text-[48px] md:text-[72px] lg:text-[101px] leading-[0.9] text-text-primary">
+          <h2 className="font-display text-[48px] md:text-[72px] lg:text-[101px] leading-[0.9] text-ink">
             About me
           </h2>
         </div>
 
         {/* Content */}
         <div className="lg:flex-1 min-w-0 flex flex-col gap-6">
-          <p className="font-body font-medium text-xl md:text-2xl lg:text-[32px] leading-[1.4] text-text-primary">
+          <p className="font-body font-medium text-xl md:text-2xl lg:text-[32px] leading-[1.4] text-ink">
             {aboutDescription.headline}
           </p>
-          <p className="font-body font-normal text-base lg:text-lg leading-relaxed text-text-secondary">
+          <p className="font-body font-normal text-base lg:text-lg leading-relaxed text-ink-muted">
             {aboutDescription.body}
           </p>
+          <div className="flex flex-wrap gap-3">
+            {aboutDescription.skills.map((skill) => (
+              <ProjectTag key={skill}>{skill}</ProjectTag>
+            ))}
+          </div>
           <div className="mt-2">
             <LinkButton href="/about" type="demo">
               More about me

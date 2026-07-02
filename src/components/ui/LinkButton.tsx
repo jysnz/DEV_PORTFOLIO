@@ -15,7 +15,7 @@ export function LinkButton({ href, children, type = "demo", className }: LinkBut
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "group inline-flex flex-col gap-1 items-start transition-opacity duration-150 hover:opacity-80 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
+        "group inline-flex flex-col gap-1 items-start focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
         className
       )}
     >
@@ -27,7 +27,22 @@ export function LinkButton({ href, children, type = "demo", className }: LinkBut
           <GitHubIcon className="size-[26px] text-accent" />
         )}
       </span>
-      <span className="block h-0.5 w-full bg-accent" />
+      <svg
+        className="w-full h-2 text-accent"
+        viewBox="0 0 100 8"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M1,4 Q10,1 20,4 T40,4 T60,4 T80,4 T99,4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          pathLength={100}
+          className="sketch-underline-path"
+        />
+      </svg>
     </a>
   );
 }

@@ -6,7 +6,7 @@ export interface FooterProps {
 
 export function Footer({ className }: FooterProps) {
   return (
-    <p className={className ?? "text-text-secondary font-body font-medium text-base leading-relaxed"}>
+    <p className={className ?? "text-ink-muted font-body font-medium text-base leading-relaxed"}>
       {siteConfig.copyright}
     </p>
   );

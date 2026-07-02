@@ -8,10 +8,10 @@ export function Projects() {
       <div className="flex flex-col gap-16 lg:gap-20">
         {/* Header */}
         <div className="flex flex-col gap-2 max-w-[600px]">
-          <h2 className="font-display text-[40px] md:text-[56px] lg:text-[76px] leading-none text-text-primary">
+          <h2 className="font-display text-[40px] md:text-[56px] lg:text-[76px] leading-none text-ink">
             Featured Projects
           </h2>
-          <p className="font-body font-normal text-base lg:text-lg leading-normal text-text-secondary">
+          <p className="font-body font-normal text-base lg:text-lg leading-normal text-ink-muted">
             Here are some of the selected projects that showcase my passion for
             software development.
           </p>
