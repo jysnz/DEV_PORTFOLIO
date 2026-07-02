@@ -3,6 +3,7 @@ import { Kalam, Inter, Patrick_Hand } from "next/font/google";
 import { themeScript } from "@/lib/theme-script";
 import { SketchDefs } from "@/components/sketch/SketchDefs";
 import { PencilTrail } from "@/components/ui/PencilTrail";
+import { SketchSelection } from "@/components/ui/SketchSelection";
 import "./globals.css";
 
 const kalam = Kalam({
@@ -90,6 +91,7 @@ export default function RootLayout({
 
         {children}
         <PencilTrail />
+        <SketchSelection />
       </body>
     </html>
   );

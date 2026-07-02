@@ -85,8 +85,13 @@ select,
 
 /* Selection highlight */
 ::selection {
-  background-color: color-mix(in srgb, var(--color-accent) 25%, transparent);
+  /* Sketchy pencil highlight — rough offset shadows simulate hand-drawn scribble */
+  background-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
   color: var(--color-ink);
+  text-shadow:
+    1px 0 0 color-mix(in srgb, var(--color-accent) 40%, transparent),
+    -0.5px 0.5px 0 color-mix(in srgb, var(--color-accent) 25%, transparent),
+    0.5px -0.5px 0 color-mix(in srgb, var(--color-accent) 20%, transparent);
 }
 
 /* Focus visible reset for better a11y */
