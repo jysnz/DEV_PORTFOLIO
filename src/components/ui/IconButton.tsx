@@ -25,7 +25,7 @@ export function IconButton({ href, label, children, className }: IconButtonProps
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "group relative flex items-center justify-center size-[54px] rounded-full bg-paper-input text-ink-muted transition-colors duration-150 hover:bg-accent hover:text-accent-contrast focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
+        "group relative flex items-center justify-center size-[54px] rounded-full bg-paper-input text-ink-muted transition-colors duration-150 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2",
         "border",
         ready ? "border-transparent" : "border-line",
         className

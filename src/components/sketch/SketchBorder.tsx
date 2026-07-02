@@ -28,7 +28,7 @@ export function SketchBorder({ svgRef, emphasisSvgRef, hoverEmphasis = false }: 
         <svg
           ref={emphasisSvgRef}
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 w-full h-full overflow-visible opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 w-full h-full overflow-visible opacity-0 transition-opacity duration-200 group-hover:opacity-40"
         />
       )}
     </>

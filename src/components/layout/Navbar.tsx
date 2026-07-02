@@ -57,9 +57,26 @@ export function Navbar({ className }: NavbarProps) {
             <li key={link.href}>
               <a
                 href={link.href}
-                className="relative text-ink-muted font-body font-medium text-base leading-relaxed transition-colors duration-150 hover:text-accent after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-200 hover:after:w-full"
+                className="group relative text-ink-muted font-body font-medium text-base leading-relaxed transition-colors duration-150 hover:text-ink"
               >
                 {link.label}
+                {/* Sketch underline animation */}
+                <svg
+                  className="absolute -bottom-1 left-0 w-full h-[6px] overflow-visible"
+                  viewBox="0 0 100 6"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0,3 C5,1 10,5 15,3 C20,1 25,5 30,3 C35,1 40,5 45,3 C50,1 55,5 60,3 C65,1 70,5 75,3 C80,1 85,5 90,3 C95,1 100,3 100,3"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    pathLength="100"
+                    className="text-accent stroke-current [stroke-dasharray:100] [stroke-dashoffset:100] transition-[stroke-dashoffset] duration-[400ms] ease-out group-hover:[stroke-dashoffset:0] group-focus-visible:[stroke-dashoffset:0]"
+                  />
+                </svg>
               </a>
             </li>
           ))}

@@ -1,17 +1,19 @@
 "use client";
 
-import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import { LinkedInIcon, GitHubIcon } from "@/assets/icons";
 import { siteConfig, socialLinks } from "@/lib/data";
-import { useRoughShape } from "@/hooks/useRoughShape";
-import { SketchBorder } from "@/components/sketch/SketchBorder";
-import { cn } from "@/lib/utils";
+import { Stack } from "@/components/ui/Stack";
+import { StackSketchCard } from "@/components/ui/StackSketchCard";
+
+const stackImages = [
+  { src: "/images/hero-portrait.png", sketchSrc: "/images/Sketch_Zephyr.png", alt: "Portrait" },
+  { src: "/images/image1.jpg", sketchSrc: "/images/image1sketch.jpg", alt: "Image 1" },
+  { src: "/images/image2.jpg", sketchSrc: "/images/image2sketch.jpg", alt: "Image 2" },
+];
 
 export function Hero() {
-  const { containerRef, svgRef, ready } = useRoughShape<HTMLDivElement>({ radius: 16 });
-
   return (
     <section
       id="home"
@@ -41,23 +43,23 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Hero image */}
-          <div
-            ref={containerRef}
-            className={cn(
-              "relative w-fit mx-auto lg:mx-0 shrink-0 p-1.5 rounded-xl border",
-              ready ? "border-transparent" : "border-line"
-            )}
-          >
-            <SketchBorder svgRef={svgRef} />
-            <Image
-              src="/images/hero-portrait.png"
-              alt="Portrait of Jayson Dela Cruz"
-              width={523}
-              height={695}
-              priority
-              className="pencil-photo relative w-auto h-auto max-h-[32vh] sm:max-h-[38vh] lg:max-h-[58vh] xl:max-h-[62vh] rounded-lg object-cover"
-              sizes="(max-width: 768px) 320px, (max-width: 1024px) 400px, (max-width: 1280px) 480px, 523px"
+          {/* Hero image stack */}
+          <div className="relative mx-auto lg:mx-0 shrink-0 w-[200px] h-[260px] sm:w-[220px] sm:h-[290px] lg:w-[280px] lg:h-[370px] xl:w-[320px] xl:h-[420px]">
+            <Stack
+              randomRotation={true}
+              sensitivity={180}
+              sendToBackOnClick={true}
+              autoplay={true}
+              autoplayDelay={4000}
+              pauseOnHover={true}
+              cards={stackImages.map((img, i) => (
+                <StackSketchCard
+                  key={i}
+                  src={img.src}
+                  sketchSrc={img.sketchSrc}
+                  alt={img.alt}
+                />
+              ))}
             />
           </div>
         </div>

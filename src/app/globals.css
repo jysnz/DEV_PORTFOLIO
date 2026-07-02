@@ -50,6 +50,37 @@ html {
 body {
   background-color: var(--color-paper-bg);
   color: var(--color-ink);
+  cursor: url('/cursors/pencil.svg') 28 28, auto;
+  /* Notebook ruled lines */
+  background-image:
+    /* Red margin line */
+    linear-gradient(
+      to right,
+      transparent 59px,
+      color-mix(in srgb, var(--accent-pencil) 30%, transparent) 59px,
+      color-mix(in srgb, var(--accent-pencil) 30%, transparent) 60px,
+      transparent 60px
+    ),
+    /* Horizontal ruled lines */
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 31px,
+      color-mix(in srgb, var(--graphite-ink) 7%, transparent) 31px,
+      color-mix(in srgb, var(--graphite-ink) 7%, transparent) 32px
+    );
+  background-size: 100% 32px;
+  background-attachment: local;
+}
+
+/* Pencil pointer cursor for interactive elements */
+a,
+button,
+[role="button"],
+input[type="submit"],
+select,
+.cursor-pointer {
+  cursor: url('/cursors/pencil-pointer.svg') 28 28, pointer;
 }
 
 /* Selection highlight */

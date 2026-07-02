@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Kalam, Inter, Patrick_Hand } from "next/font/google";
 import { themeScript } from "@/lib/theme-script";
 import { SketchDefs } from "@/components/sketch/SketchDefs";
+import { PencilTrail } from "@/components/ui/PencilTrail";
 import "./globals.css";
 
 const kalam = Kalam({
@@ -88,6 +89,7 @@ export default function RootLayout({
         />
 
         {children}
+        <PencilTrail />
       </body>
     </html>
   );

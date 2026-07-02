@@ -10,7 +10,7 @@ export function CrossHatchOverlay({ className }: CrossHatchOverlayProps) {
     <svg
       aria-hidden="true"
       className={cn(
-        "pointer-events-none absolute inset-0 w-full h-full opacity-0 transition-opacity duration-200 group-hover:opacity-100 mix-blend-multiply dark:mix-blend-screen",
+        "pointer-events-none absolute inset-0 w-full h-full opacity-0 transition-opacity duration-200 group-hover:opacity-[0.03] mix-blend-multiply dark:mix-blend-screen",
         className
       )}
     >

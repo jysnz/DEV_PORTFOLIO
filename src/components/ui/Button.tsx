@@ -28,7 +28,7 @@ export function Button({
   });
 
   const baseStyles = cn(
-    "group relative inline-flex items-center justify-center h-[54px] rounded-full bg-accent text-accent-contrast font-body font-bold text-base uppercase transition-all duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.98]",
+    "group relative inline-flex items-center justify-center h-[54px] rounded-full bg-accent text-accent-contrast font-body font-bold text-base uppercase active:scale-[0.98]",
     "border",
     ready ? "border-transparent" : "border-line"
   );

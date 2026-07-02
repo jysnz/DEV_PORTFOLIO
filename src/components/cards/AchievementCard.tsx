@@ -21,7 +21,7 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
     <article
       ref={containerRef}
       className={cn(
-        "group relative flex flex-col gap-4 p-6 lg:p-8 rounded-md bg-paper-card border transition-transform duration-200 hover:-translate-y-0.5 hover:-rotate-[0.3deg]",
+        "group relative flex flex-col gap-4 p-6 lg:p-8 rounded-md bg-paper-card border",
         ready ? "border-transparent" : "border-line/30"
       )}
     >
