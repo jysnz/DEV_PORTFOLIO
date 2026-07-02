@@ -16,9 +16,9 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
   return (
     <TiltCard tiltAmount={3} className="h-full">
       <BorderGlow
-        className={cn("h-full", className)}
+        className={cn("h-full backdrop-blur-[12px]", className)}
         innerClassName="flex flex-col gap-6 p-6 lg:p-8 h-full"
-        backgroundColor="#130d26"
+        backgroundColor="rgba(255, 255, 255, 0.03)"
         borderRadius={16}
         glowColor="258 60 85"
         colors={["#C3B1FF", "#9b7fff", "#7c3aed"]}

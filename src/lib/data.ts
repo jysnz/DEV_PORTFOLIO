@@ -12,7 +12,7 @@ export const siteConfigFallback = {
     "A 4th-year information technology student. A Philippines representative in the Vex Robotics World Championship. An aspiring full-stack developer.",
   email: "delacruz.jayson.delafuente@gmail.com",
   copyright: "© 2026 Zephyr",
-  hero_image_url: "/images/hero-portrait.png",
+  hero_image_url: null,
 };
 
 export const navLinksFallback: NavLink[] = [

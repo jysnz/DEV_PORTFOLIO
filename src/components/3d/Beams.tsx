@@ -5,8 +5,9 @@ import { forwardRef, useImperativeHandle, useEffect, useRef, useMemo } from "rea
 import * as THREE from "three";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
-import { degToRad } from "three/src/math/MathUtils.js";
 import "./Beams.css";
+
+const { degToRad } = THREE.MathUtils;
 
 function extendMaterial(
   BaseMaterial: typeof THREE.MeshStandardMaterial,

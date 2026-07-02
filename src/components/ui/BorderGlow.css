@@ -1,3 +1,15 @@
+@property --edge-proximity {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --cursor-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 45deg;
+}
+
 .border-glow-card {
   --edge-proximity: 0;
   --cursor-angle: 45deg;
@@ -138,4 +150,23 @@
   position: relative;
   overflow: hidden;
   z-index: 1;
+}
+
+/* One-shot intro sweep, driven by the compositor instead of per-frame JS writes */
+.border-glow-card.sweep-active {
+  animation: border-glow-sweep 4s 1;
+}
+
+@keyframes border-glow-sweep {
+  0% { --edge-proximity: 0; --cursor-angle: 110deg; animation-timing-function: ease-out; }
+  12.5% { --edge-proximity: 100; animation-timing-function: ease-in; }
+  62.5% { --cursor-angle: 465deg; animation-timing-function: linear; }
+  85% { --edge-proximity: 100; animation-timing-function: ease-in; }
+  100% { --edge-proximity: 0; --cursor-angle: 465deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .border-glow-card.sweep-active {
+    animation: none;
+  }
 }

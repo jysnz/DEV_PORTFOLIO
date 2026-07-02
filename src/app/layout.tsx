@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Manrope } from "next/font/google";
+import { ScrollProgress } from "@/components/layout/ScrollProgress";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 import "./globals.css";
 
 const bebasNeue = Bebas_Neue({
@@ -27,13 +29,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bebasNeue.variable} ${manrope.variable} h-full antialiased`}
+      className={`${bebasNeue.variable} ${manrope.variable} h-full antialiased scroll-smooth`}
       suppressHydrationWarning
     >
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);document.addEventListener('DOMContentLoaded',function(){document.documentElement.classList.add('smooth-scroll')})`,
+            __html: `if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);`,
           }}
         />
       </head>
@@ -44,7 +46,9 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
+        <ScrollProgress />
         {children}
+        <CustomCursor />
       </body>
     </html>
   );

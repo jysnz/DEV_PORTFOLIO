@@ -1,0 +1,53 @@
+.custom-cursor {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.custom-cursor__pos {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.custom-cursor__dot {
+  display: block;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 10px rgba(195, 177, 255, 0.6);
+  transition: opacity 0.2s ease, transform 0.25s ease;
+}
+
+.custom-cursor__ring {
+  display: block;
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(195, 177, 255, 0.6);
+  mix-blend-mode: difference;
+  transition: transform 0.25s ease, opacity 0.2s ease, border-color 0.25s ease;
+}
+
+/* Ring grows and dot fades over interactive elements */
+.custom-cursor.is-hover .custom-cursor__ring {
+  transform: scale(2.2);
+  border-color: rgba(195, 177, 255, 0.9);
+}
+
+.custom-cursor.is-hover .custom-cursor__dot {
+  opacity: 0;
+}
+
+/* Fade out entirely over text fields (native I-beam stays visible) */
+.custom-cursor.is-text .custom-cursor__dot,
+.custom-cursor.is-text .custom-cursor__ring,
+.custom-cursor.is-hidden .custom-cursor__dot,
+.custom-cursor.is-hidden .custom-cursor__ring {
+  opacity: 0;
+}

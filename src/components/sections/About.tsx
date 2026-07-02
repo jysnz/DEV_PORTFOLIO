@@ -3,6 +3,7 @@
 import { Section } from "@/components/layout/Section";
 import { LinkButton } from "@/components/ui/LinkButton";
 import { AnimateIn } from "@/components/3d/AnimateIn";
+import { SplitText } from "@/components/ui/SplitText";
 
 export interface AboutProps {
   aboutDescription: {
@@ -14,12 +15,15 @@ export interface AboutProps {
 export function About({ aboutDescription }: AboutProps) {
   return (
     <Section id="about" ariaLabel="About me">
-      <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
-        <AnimateIn direction="left" className="lg:w-[40%] shrink-0">
-          <h2 className="font-display text-[48px] md:text-[72px] lg:text-[101px] leading-[0.9] text-gradient">
-            About me
+      <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
+        <div className="lg:w-[40%] shrink-0">
+          <h2
+            aria-label="About me"
+            className="font-display text-[48px] md:text-[72px] lg:text-[101px] leading-[0.9]"
+          >
+            <SplitText text="About me" trigger="scroll" stagger={22} />
           </h2>
-        </AnimateIn>
+        </div>
 
         <AnimateIn direction="right" delay={200} className="lg:flex-1 min-w-0 flex flex-col gap-6">
           <div className="p-6 lg:p-8 rounded-2xl glass">

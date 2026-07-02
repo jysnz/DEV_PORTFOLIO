@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { usePrefersReducedMotion } from "@/lib/useMediaQuery";
 
 const Beams = dynamic(
   () => import("@/components/3d/Beams").then((mod) => mod.Beams),
@@ -8,6 +9,12 @@ const Beams = dynamic(
 );
 
 export function ClientBeams() {
+  const reducedMotion = usePrefersReducedMotion();
+
+  // Purely decorative full-page WebGL animation: skip it entirely when the
+  // user has asked the OS for reduced motion instead of just slowing it down.
+  if (reducedMotion) return null;
+
   return (
     <Beams
       beamWidth={2}

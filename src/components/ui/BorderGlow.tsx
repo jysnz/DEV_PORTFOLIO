@@ -35,24 +35,6 @@ function buildGradientVars(colors: string[]): Record<string, string> {
   return vars;
 }
 
-function easeOutCubic(x: number) { return 1 - Math.pow(1 - x, 3); }
-function easeInCubic(x: number) { return x * x * x; }
-
-function animateValue({ start = 0, end = 100, duration = 1000, delay = 0, ease = easeOutCubic, onUpdate, onEnd }: {
-  start?: number; end?: number; duration?: number; delay?: number;
-  ease?: (x: number) => number; onUpdate: (v: number) => void; onEnd?: () => void;
-}) {
-  const t0 = performance.now() + delay;
-  function tick() {
-    const elapsed = performance.now() - t0;
-    const t = Math.min(elapsed / duration, 1);
-    onUpdate(start + (end - start) * ease(t));
-    if (t < 1) requestAnimationFrame(tick);
-    else if (onEnd) onEnd();
-  }
-  setTimeout(() => requestAnimationFrame(tick), delay);
-}
-
 export interface BorderGlowProps {
   children: React.ReactNode;
   className?: string;
@@ -128,22 +110,31 @@ export function BorderGlow({
   useEffect(() => {
     if (!animated || !cardRef.current) return;
     const card = cardRef.current;
-    const angleStart = 110;
-    const angleEnd = 465;
-    card.classList.add("sweep-active");
-    card.style.setProperty("--cursor-angle", `${angleStart}deg`);
 
-    animateValue({ duration: 500, onUpdate: v => card.style.setProperty("--edge-proximity", String(v)) });
-    animateValue({ ease: easeInCubic, duration: 1500, end: 50, onUpdate: v => {
-      card.style.setProperty("--cursor-angle", `${(angleEnd - angleStart) * (v / 100) + angleStart}deg`);
-    }});
-    animateValue({ ease: easeOutCubic, delay: 1500, duration: 2250, start: 50, end: 100, onUpdate: v => {
-      card.style.setProperty("--cursor-angle", `${(angleEnd - angleStart) * (v / 100) + angleStart}deg`);
-    }});
-    animateValue({ ease: easeInCubic, delay: 2500, duration: 1500, start: 100, end: 0,
-      onUpdate: v => card.style.setProperty("--edge-proximity", String(v)),
-      onEnd: () => card.classList.remove("sweep-active"),
-    });
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // Only pay for the sweep once the card is actually scrolled into view,
+    // instead of every card animating at once the moment they all mount
+    // (e.g. right after a refresh that lands mid-page).
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        card.classList.add("sweep-active");
+        io.disconnect();
+      },
+      { threshold: 0.2 }
+    );
+    io.observe(card);
+
+    const handleAnimationEnd = (e: AnimationEvent) => {
+      if (e.animationName === "border-glow-sweep") card.classList.remove("sweep-active");
+    };
+    card.addEventListener("animationend", handleAnimationEnd);
+
+    return () => {
+      io.disconnect();
+      card.removeEventListener("animationend", handleAnimationEnd);
+    };
   }, [animated]);
 
   const glowVars = buildGlowVars(glowColor, glowIntensity);
