@@ -1,33 +1,10 @@
-export interface Project {
+export interface SiteConfig {
+  name: string;
   title: string;
-  description: string;
-  tag?: string;
-  info: ProjectInfo[];
-  links: ProjectLink[];
-  repositories?: Repository[];
-}
-
-export interface Repository {
-  label: string;
-  href: string;
-}
-
-export interface ProjectInfo {
-  topic: string;
-  value: string;
-}
-
-export interface ProjectLink {
-  label: string;
-  href: string;
-  type: "demo" | "github";
-}
-
-export interface Achievement {
-  title: string;
-  description: string;
-  year: string;
-  location?: string;
+  subtitle: string;
+  email: string;
+  copyright: string;
+  hero_image_url?: string | null;
 }
 
 export interface NavLink {
@@ -41,8 +18,55 @@ export interface SocialLink {
   icon: "linkedin" | "github" | "twitter" | "instagram";
 }
 
+export interface ProjectInfo {
+  topic: string;
+  value: string;
+}
+
+export interface ProjectLink {
+  label: string;
+  href: string;
+  type: "demo" | "github";
+}
+
+export interface Repository {
+  label: string;
+  href: string;
+}
+
+export interface ProjectTechItem {
+  name: string;
+  icon_url?: string | null;
+}
+
+export interface Project {
+  title: string;
+  description: string;
+  tag?: string | null;
+  image_url?: string | null;
+  tech_stack?: ProjectTechItem[] | null;
+  info: ProjectInfo[];
+  links: ProjectLink[];
+  repositories?: Repository[] | null;
+}
+
+export interface Achievement {
+  title: string;
+  description: string;
+  year: string;
+  location?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  image_url?: string | null;
+}
+
+export interface TechStack {
+  name: string;
+  category: "frontend" | "backend" | "mobile" | "database" | "tools";
+  icon_url?: string | null;
+}
+
 export interface AboutDescription {
   headline: string;
   body: string;
-  skills: string[];
 }

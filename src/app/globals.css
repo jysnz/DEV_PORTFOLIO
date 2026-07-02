@@ -100,6 +100,12 @@ select,
   outline-offset: 2px;
 }
 
+/* Remove default focus outline on form inputs - sketch border handles focus state */
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
 /* Desaturated / pencil-sketch photo treatment */
 .pencil-photo {
   filter: grayscale(0.85) sepia(0.12) contrast(1.1) saturate(0.5);

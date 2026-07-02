@@ -1,8 +1,12 @@
 import { Section } from "@/components/layout/Section";
 import { ProjectCard } from "@/components/cards/ProjectCard";
-import { projects } from "@/lib/data";
+import type { Project } from "@/lib/types";
 
-export function Projects() {
+export interface ProjectsProps {
+  projects: Project[];
+}
+
+export function Projects({ projects }: ProjectsProps) {
   return (
     <Section id="projects" divider ariaLabel="Featured Projects">
       <div className="flex flex-col gap-16 lg:gap-20">
@@ -17,8 +21,8 @@ export function Projects() {
           </p>
         </div>
 
-        {/* Project list */}
-        <div className="flex flex-col gap-10 lg:gap-16">
+        {/* Project grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {projects.map((project) => (
             <ProjectCard key={project.title} project={project} />
           ))}

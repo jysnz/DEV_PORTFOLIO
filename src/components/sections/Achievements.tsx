@@ -1,20 +1,24 @@
 import { Section } from "@/components/layout/Section";
 import { AchievementCard } from "@/components/cards/AchievementCard";
-import { achievements } from "@/lib/data";
+import type { Achievement } from "@/lib/types";
 
-export function Achievements() {
+export interface AchievementsProps {
+  achievements: Achievement[];
+}
+
+export function Achievements({ achievements }: AchievementsProps) {
   return (
     <Section id="achievements" divider ariaLabel="Achievements">
-      <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+      <div className="flex flex-col gap-10 lg:gap-12">
         {/* Title */}
-        <div className="lg:w-[45%] shrink-0">
+        <div>
           <h2 className="font-display text-[40px] md:text-[56px] lg:text-[76px] leading-none text-ink">
             Achievements
           </h2>
         </div>
 
-        {/* Achievement list */}
-        <div className="lg:flex-1 min-w-0 flex flex-col gap-10">
+        {/* Achievement grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {achievements.map((achievement) => (
             <AchievementCard key={achievement.title} achievement={achievement} />
           ))}

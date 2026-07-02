@@ -6,9 +6,21 @@ import { Button } from "@/components/ui/Button";
 import { FormInput } from "@/components/ui/FormInput";
 import { Footer } from "@/components/layout/Footer";
 import { LinkedInIcon, GitHubIcon, TwitterIcon, InstagramIcon } from "@/assets/icons";
-import { siteConfig } from "@/lib/data";
+import type { SiteConfig, SocialLink } from "@/lib/types";
 
-export function Contact() {
+const iconMap = {
+  linkedin: LinkedInIcon,
+  github: GitHubIcon,
+  twitter: TwitterIcon,
+  instagram: InstagramIcon,
+} as const;
+
+export interface ContactProps {
+  siteConfig: SiteConfig;
+  socialLinks: SocialLink[];
+}
+
+export function Contact({ siteConfig, socialLinks }: ContactProps) {
   const [submitted, setSubmitted] = useState(false);
 
   return (
@@ -34,27 +46,25 @@ export function Contact() {
 
             {/* Social icons */}
             <div className="flex items-center gap-6">
-              {[
-                { href: "https://linkedin.com", label: "LinkedIn profile", Icon: LinkedInIcon },
-                { href: "https://github.com", label: "GitHub profile", Icon: GitHubIcon },
-                { href: "https://twitter.com", label: "Twitter profile", Icon: TwitterIcon },
-                { href: "https://instagram.com", label: "Instagram profile", Icon: InstagramIcon },
-              ].map(({ href, label, Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-ink-muted transition-all duration-200 hover:text-accent hover:scale-110"
-                >
-                  <Icon className="size-8" />
-                </a>
-              ))}
+              {socialLinks.map((link) => {
+                const Icon = iconMap[link.icon];
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    aria-label={`${link.label} profile`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ink-muted transition-all duration-200 hover:text-accent hover:scale-110"
+                  >
+                    <Icon className="size-8" />
+                  </a>
+                );
+              })}
             </div>
           </div>
 
-          <Footer />
+          <Footer copyright={siteConfig.copyright} />
         </div>
 
         {/* Right: form */}

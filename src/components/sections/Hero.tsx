@@ -3,9 +3,9 @@
 import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import { LinkedInIcon, GitHubIcon } from "@/assets/icons";
-import { siteConfig, socialLinks } from "@/lib/data";
 import { Stack } from "@/components/ui/Stack";
 import { StackSketchCard } from "@/components/ui/StackSketchCard";
+import type { SiteConfig, SocialLink } from "@/lib/types";
 
 const stackImages = [
   { src: "/images/hero-portrait.png", sketchSrc: "/images/Sketch_Zephyr.png", alt: "Portrait" },
@@ -13,7 +13,12 @@ const stackImages = [
   { src: "/images/image2.jpg", sketchSrc: "/images/image2sketch.jpg", alt: "Image 2" },
 ];
 
-export function Hero() {
+export interface HeroProps {
+  siteConfig: SiteConfig;
+  socialLinks: SocialLink[];
+}
+
+export function Hero({ siteConfig, socialLinks }: HeroProps) {
   return (
     <section
       id="home"

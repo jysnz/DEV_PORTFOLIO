@@ -2,15 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { navLinks, siteConfig } from "@/lib/data";
 import { MenuIcon, CloseIcon } from "@/assets/icons";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import type { NavLink } from "@/lib/types";
 
 export interface NavbarProps {
+  navLinks: NavLink[];
+  siteName: string;
   className?: string;
 }
 
-export function Navbar({ className }: NavbarProps) {
+export function Navbar({ navLinks, siteName, className }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -48,7 +50,7 @@ export function Navbar({ className }: NavbarProps) {
           href="#home"
           className="font-display text-[32px] leading-normal text-ink-muted tracking-tight transition-colors duration-150 hover:text-ink"
         >
-          {siteConfig.name}
+          {siteName}
         </a>
 
         {/* Desktop nav */}

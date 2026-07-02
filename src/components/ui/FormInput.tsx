@@ -1,8 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useRoughShape } from "@/hooks/useRoughShape";
-import { SketchBorder } from "@/components/sketch/SketchBorder";
 
 export interface FormInputProps {
   label: string;
@@ -21,10 +21,16 @@ export function FormInput({
   required = false,
   className,
 }: FormInputProps) {
-  const { containerRef, svgRef, ready } = useRoughShape<HTMLDivElement>({ radius: 8 });
+  const [focused, setFocused] = useState(false);
+  const { containerRef, svgRef, emphasisSvgRef, ready } = useRoughShape<HTMLDivElement>({
+    radius: 8,
+    withEmphasis: true,
+    roughness: 1.5,
+    emphasisStrokeWidth: 3,
+  });
 
   const inputStyles =
-    "block w-full bg-paper-input rounded-sm px-4 py-3 text-lg text-ink font-body border border-transparent placeholder:text-ink-muted/40 transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-accent/50";
+    "relative block w-full bg-paper-input rounded-sm px-4 py-3 text-lg text-ink font-body border-none placeholder:text-ink-muted/40 outline-none ring-0 focus:outline-none focus:ring-0";
 
   return (
     <div className={cn("flex flex-col gap-2", className)}>
@@ -37,9 +43,28 @@ export function FormInput({
       </label>
       <div
         ref={containerRef}
-        className={cn("relative rounded-sm border", ready ? "border-transparent" : "border-line")}
+        className={cn(
+          "relative rounded-sm border",
+          ready ? "border-transparent" : "border-line"
+        )}
       >
-        <SketchBorder svgRef={svgRef} />
+        {/* Base sketch border - always visible */}
+        <svg
+          ref={svgRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 w-full h-full overflow-visible"
+        />
+
+        {/* Emphasis sketch border - visible on focus */}
+        <svg
+          ref={emphasisSvgRef}
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute inset-0 w-full h-full overflow-visible transition-opacity duration-200",
+            focused ? "opacity-70" : "opacity-0"
+          )}
+        />
+
         {type === "textarea" ? (
           <textarea
             id={name}
@@ -48,6 +73,8 @@ export function FormInput({
             required={required}
             rows={5}
             className={cn(inputStyles, "resize-none")}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
           />
         ) : (
           <input
@@ -57,6 +84,8 @@ export function FormInput({
             placeholder={placeholder}
             required={required}
             className={inputStyles}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
           />
         )}
       </div>

@@ -1,13 +1,12 @@
-import { siteConfig } from "@/lib/data";
-
 export interface FooterProps {
+  copyright?: string;
   className?: string;
 }
 
-export function Footer({ className }: FooterProps) {
+export function Footer({ copyright, className }: FooterProps) {
   return (
     <p className={className ?? "text-ink-muted font-body font-medium text-base leading-relaxed"}>
-      {siteConfig.copyright}
+      {copyright ?? "© 2026 Zephyr"}
     </p>
   );
 }
