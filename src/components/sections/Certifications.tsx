@@ -61,7 +61,7 @@ export function Certifications({ certifications }: CertificationsProps) {
         {/* Side by side: details left, carousel right — same height */}
         <div className="flex flex-col lg:flex-row gap-5 lg:gap-8 lg:h-[480px] items-center justify-center">
           {/* Left: details pane */}
-          <div className="w-full lg:w-[340px] xl:w-[380px] lg:h-[380px] shrink-0">
+          <div className="w-full lg:w-[400px] xl:w-[440px] lg:h-[380px] shrink-0">
             <SketchBox className="p-6 lg:p-8 h-full">
               <div className="flex flex-col justify-center h-full gap-5">
                 <div className="flex flex-col gap-2">
