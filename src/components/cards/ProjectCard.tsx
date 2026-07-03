@@ -4,12 +4,8 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { ProjectTag } from "@/components/ui/ProjectTag";
 import { LinkButton } from "@/components/ui/LinkButton";
-import { GithubLinksDropdown } from "@/components/ui/GithubLinksDropdown";
-import { TechStackDropdown } from "@/components/ui/TechStackDropdown";
-import { DescriptionExpandable } from "@/components/ui/DescriptionExpandable";
-import { useRoughShape } from "@/hooks/useRoughShape";
-import { SketchBorder } from "@/components/sketch/SketchBorder";
-import { CrossHatchOverlay } from "@/components/sketch/CrossHatchOverlay";
+import { TiltCard } from "@/components/3d/TiltCard";
+import { BorderGlow } from "@/components/ui/BorderGlow";
 import type { Project } from "@/lib/types";
 
 export interface ProjectCardProps {
@@ -24,103 +20,64 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
   });
 
   return (
-    <article
-      ref={containerRef}
-      className={cn(
-        "group relative flex flex-col gap-6 p-5 lg:p-6 bg-paper-card rounded-md border h-full",
-        ready ? "border-transparent" : "border-line/30",
-        className
-      )}
-    >
-      <SketchBorder svgRef={svgRef} emphasisSvgRef={emphasisSvgRef} hoverEmphasis />
-      <CrossHatchOverlay />
-
-      {/* Project image placeholder */}
-      <div className="relative shrink-0 w-full h-[180px] lg:h-[200px] rounded-md overflow-hidden bg-bg-card">
-        {project.image_url ? (
-          <Image
-            src={project.image_url}
-            alt={project.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
-        ) : (
-          <div className="flex items-center justify-center w-full h-full">
-            <svg
-              className="size-12 text-ink-muted/20"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1}
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 0 3Z"
-              />
-            </svg>
-          </div>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="relative flex flex-col gap-4 flex-1 min-w-0">
+    <TiltCard tiltAmount={3} className="h-full">
+      <BorderGlow
+        className={cn("h-full backdrop-blur-[12px]", className)}
+        innerClassName="flex flex-col gap-6 p-6 lg:p-8 h-full"
+        backgroundColor="rgba(255, 255, 255, 0.03)"
+        borderRadius={16}
+        glowColor="258 60 85"
+        colors={["#C3B1FF", "#9b7fff", "#7c3aed"]}
+        glowIntensity={1.0}
+        glowRadius={40}
+        animated
+      >
         {/* Header with tag */}
-        {project.tag && (
-          <div>
-            <ProjectTag>{project.tag}</ProjectTag>
-          </div>
-        )}
-
-        {/* Title and description */}
-        <div className="flex flex-col gap-2">
-          <h3 className="font-body font-medium text-lg lg:text-xl leading-[1.4] text-ink">
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="font-body font-semibold text-lg md:text-xl lg:text-2xl leading-[1.3] text-text-primary">
             {project.title}
           </h3>
-          <DescriptionExpandable description={project.description} />
+          {project.tag && <ProjectTag>{project.tag}</ProjectTag>}
         </div>
 
+        {/* Description */}
+        <p className="font-body font-normal text-sm lg:text-base leading-relaxed text-text-secondary flex-1">
+          {project.description}
+        </p>
+
         {/* Project info */}
-        <div className="flex flex-col gap-2">
-          <dl className="border-b border-line">
-            {project.info.map((item) => (
-              <div
-                key={item.topic}
-                className="flex items-center justify-between py-2.5 border-t border-line"
-              >
-                <dt className="font-body font-medium text-sm leading-relaxed text-ink">
-                  {item.topic}
-                </dt>
-                <dd className="font-body font-medium text-sm leading-relaxed text-ink-muted">
-                  {item.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
+        <div className="flex flex-wrap gap-3">
+          {project.info.map((item) => (
+            <div
+              key={item.topic}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06]"
+            >
+              <span className="font-body font-medium text-xs text-text-secondary uppercase tracking-wide">
+                {item.topic}:
+              </span>
+              <span className="font-body font-medium text-xs text-text-primary">
+                {item.value}
+              </span>
+            </div>
+          ))}
         </div>
 
         {/* Links */}
-        <div className="flex flex-wrap items-start gap-4 mt-auto">
-          {project.tech_stack && project.tech_stack.length > 0 && (
-            <TechStackDropdown techStack={project.tech_stack} />
-          )}
-          {project.links.map((link) => (
-            <LinkButton key={link.label} href={link.href} type={link.type}>
-              {link.label}
-            </LinkButton>
-          ))}
-          {project.repositories && project.repositories.length === 1 && (
-            <LinkButton href={project.repositories[0].href} type="github">
-              {project.repositories[0].label}
-            </LinkButton>
-          )}
-          {project.repositories && project.repositories.length > 1 && (
-            <GithubLinksDropdown repositories={project.repositories} />
-          )}
-        </div>
-      </div>
-    </article>
+        {(project.links.length > 0 || (project.repositories && project.repositories.length > 0)) && (
+          <div className="flex flex-wrap items-start gap-2 pt-2 border-t border-white/[0.06] mt-auto">
+            {project.links.map((link) => (
+              <LinkButton key={link.label} href={link.href} type={link.type}>
+                {link.label}
+              </LinkButton>
+            ))}
+            {project.repositories?.map((repo) => (
+              <LinkButton key={repo.label} href={repo.href} type="github">
+                {repo.label}
+              </LinkButton>
+            ))}
+          </div>
+        )}
+      </BorderGlow>
+    </TiltCard>
   );
 }

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import { GradualBlur } from "@/components/ui/GradualBlur";
+import { useActiveSection } from "@/lib/useActiveSection";
 import { MenuIcon, CloseIcon } from "@/assets/icons";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import type { NavLink } from "@/lib/types";
 
 export interface NavbarProps {
@@ -14,16 +15,21 @@ export interface NavbarProps {
 
 export function Navbar({ navLinks, siteName, className }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  const sectionIds = useMemo(
+    () => navLinks.map((link) => link.href.replace("#", "")),
+    [navLinks]
+  );
+  const activeSection = useActiveSection(sectionIds);
+
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    // Delay enabling transitions so the initial state renders without animation
+    const timer = setTimeout(() => setMounted(true), 100);
+    return () => clearTimeout(timer);
   }, []);
 
-  // Close mobile menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) setIsOpen(false);
@@ -32,97 +38,128 @@ export function Navbar({ navLinks, siteName, className }: NavbarProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setScrolled(window.scrollY > 12);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+    };
+  }, []);
+
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled
-          ? "bg-paper-bg/95 backdrop-blur-md border-b border-line/50"
-          : "bg-transparent",
+        "fixed top-0 left-0 right-0 z-50",
+        mounted ? "transition-all duration-500" : "",
+        "glass-strong shadow-lg",
+        scrolled ? "shadow-black/25" : "shadow-black/10",
         className
       )}
     >
       <nav
         aria-label="Main navigation"
-        className="flex items-center justify-between px-6 md:px-[60px] py-6 max-w-[1440px] mx-auto"
+        className={cn(
+          "flex items-center justify-between px-6 md:px-[60px] lg:px-[108px] max-w-[1440px] mx-auto",
+          mounted ? "transition-[padding] duration-300" : "",
+          scrolled ? "py-3" : "py-5"
+        )}
       >
         <a
           href="#home"
-          className="font-display text-[32px] leading-normal text-ink-muted tracking-tight transition-colors duration-150 hover:text-ink"
+          className="font-display text-[32px] leading-normal text-gradient tracking-tight"
         >
           {siteName}
         </a>
 
-        {/* Desktop nav */}
-        <ul className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className="group relative text-ink-muted font-body font-medium text-base leading-relaxed transition-colors duration-150 hover:text-ink"
-              >
-                {link.label}
-                {/* Sketch underline animation */}
-                <svg
-                  className="absolute -bottom-1 left-0 w-full h-[6px] overflow-visible"
-                  viewBox="0 0 100 6"
-                  preserveAspectRatio="none"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M0,3 C5,1 10,5 15,3 C20,1 25,5 30,3 C35,1 40,5 45,3 C50,1 55,5 60,3 C65,1 70,5 75,3 C80,1 85,5 90,3 C95,1 100,3 100,3"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    pathLength="100"
-                    className="text-accent stroke-current [stroke-dasharray:100] [stroke-dashoffset:100] transition-[stroke-dashoffset] duration-[400ms] ease-out group-hover:[stroke-dashoffset:0] group-focus-visible:[stroke-dashoffset:0]"
-                  />
-                </svg>
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-
-          {/* Mobile menu button */}
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label={isOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isOpen}
-            className="lg:hidden text-ink-muted p-2 rounded-lg transition-colors duration-150 hover:text-ink hover:bg-paper-input"
-          >
-            {isOpen ? <CloseIcon /> : <MenuIcon />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile nav */}
-      <div
-        className={cn(
-          "lg:hidden overflow-hidden transition-all duration-300 ease-out",
-          isOpen ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
-        )}
-      >
-        <div className="bg-paper-bg/95 backdrop-blur-md border-t border-line/50">
-          <ul className="flex flex-col px-6 py-4 gap-1">
-            {navLinks.map((link) => (
+        <ul className="hidden lg:flex items-center gap-1">
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.href.replace("#", "");
+            return (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="block text-ink-muted font-body font-medium text-lg py-3 px-4 rounded-lg transition-colors duration-150 hover:text-accent hover:bg-paper-input/50"
+                  aria-current={isActive ? "true" : undefined}
+                  className={cn(
+                    "relative px-4 py-2 rounded-full font-body font-medium text-sm leading-relaxed transition-all duration-200",
+                    isActive
+                      ? "text-text-primary bg-white/10"
+                      : "text-text-secondary hover:text-text-primary hover:bg-white/5"
+                  )}
                 >
                   {link.label}
+                  <span
+                    className={cn(
+                      "absolute left-1/2 -translate-x-1/2 -bottom-0.5 size-1 rounded-full bg-accent transition-opacity duration-200",
+                      isActive ? "opacity-100" : "opacity-0"
+                    )}
+                  />
                 </a>
               </li>
-            ))}
+            );
+          })}
+        </ul>
+
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isOpen}
+          className="lg:hidden text-text-secondary p-2.5 rounded-xl transition-all duration-200 hover:text-text-primary hover:bg-white/5 cursor-pointer"
+        >
+          {isOpen ? <CloseIcon /> : <MenuIcon />}
+        </button>
+      </nav>
+
+      <div
+        inert={!isOpen}
+        className={cn(
+          "lg:hidden overflow-hidden transition-all duration-300 ease-out",
+          isOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
+        )}
+      >
+        <div className="glass-strong mx-4 mb-4 rounded-2xl">
+          <ul className="flex flex-col p-4 gap-1">
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.href.replace("#", "");
+              return (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    aria-current={isActive ? "true" : undefined}
+                    className={cn(
+                      "block font-body font-medium text-base py-3 px-4 rounded-xl transition-all duration-200",
+                      isActive
+                        ? "text-text-primary bg-white/10"
+                        : "text-text-secondary hover:text-text-primary hover:bg-white/5"
+                    )}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
+      <GradualBlur
+        position="bottom"
+        height="2.5rem"
+        strength={2}
+        divCount={6}
+        curve="ease-out"
+        target="page"
+        zIndex={40}
+      />
     </header>
   );
 }

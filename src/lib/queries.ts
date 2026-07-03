@@ -1,23 +1,27 @@
 import { supabase } from "./supabase";
-import type {
-  SiteConfig,
-  NavLink,
-  SocialLink,
-  Project,
-  Achievement,
-  TechStack,
-  Recommendation,
-  Publication,
-  Certification,
-} from "./types";
+import type { Project, NavLink, SocialLink, Achievement, TechItem } from "./types";
+
+export interface SiteConfig {
+  name: string;
+  title: string;
+  subtitle: string;
+  email: string;
+  copyright: string;
+  hero_image_url: string | null;
+}
+
+export interface AboutDescription {
+  headline: string;
+  body: string;
+}
 
 export async function getSiteConfig(): Promise<SiteConfig> {
   const { data, error } = await supabase
     .from("site_config")
-    .select("name, title, subtitle, email, copyright, hero_image_url")
+    .select("*")
     .single();
 
-  if (error) throw new Error(`Failed to fetch site config: ${error.message}`);
+  if (error) throw error;
   return data;
 }
 
@@ -27,7 +31,7 @@ export async function getNavLinks(): Promise<NavLink[]> {
     .select("label, href")
     .order("sort_order");
 
-  if (error) throw new Error(`Failed to fetch nav links: ${error.message}`);
+  if (error) throw error;
   return data;
 }
 
@@ -37,7 +41,7 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
     .select("label, href, icon")
     .order("sort_order");
 
-  if (error) throw new Error(`Failed to fetch social links: ${error.message}`);
+  if (error) throw error;
   return data as SocialLink[];
 }
 
@@ -45,86 +49,59 @@ export async function getProjects(): Promise<Project[]> {
   const { data, error } = await supabase
     .from("projects")
     .select(`
+      id,
       title,
       description,
       tag,
       image_url,
-      project_tech_stack(sort_order, tech_stack(name, icon_url)),
-      project_info(topic, value, sort_order),
-      project_links(label, href, type, sort_order),
-      project_repositories(label, href, sort_order)
+      project_info (topic, value, sort_order),
+      project_links (label, href, type, sort_order),
+      project_repositories (label, href, sort_order)
     `)
     .order("sort_order");
 
-  if (error) throw new Error(`Failed to fetch projects: ${error.message}`);
+  if (error) throw error;
 
-  return data.map((project) => ({
-    title: project.title,
-    description: project.description,
-    tag: project.tag,
-    image_url: project.image_url,
-    tech_stack: (project.project_tech_stack as unknown as { sort_order: number; tech_stack: { name: string; icon_url: string | null } }[])
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map(({ tech_stack: ts }) => ({ name: ts.name, icon_url: ts.icon_url })),
-    info: (project.project_info as { topic: string; value: string; sort_order: number }[])
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map(({ topic, value }) => ({ topic, value })),
-    links: (project.project_links as { label: string; href: string; type: string; sort_order: number }[])
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map(({ label, href, type }) => ({ label, href, type: type as "demo" | "github" })),
-    repositories: (project.project_repositories as { label: string; href: string; sort_order: number }[])
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map(({ label, href }) => ({ label, href })),
+  return (data ?? []).map((p) => ({
+    title: p.title,
+    description: p.description,
+    tag: p.tag ?? undefined,
+    image_url: p.image_url ?? undefined,
+    info: (p.project_info ?? [])
+      .sort((a: { sort_order: number }, b: { sort_order: number }) => a.sort_order - b.sort_order)
+      .map((i: { topic: string; value: string }) => ({ topic: i.topic, value: i.value })),
+    links: (p.project_links ?? [])
+      .sort((a: { sort_order: number }, b: { sort_order: number }) => a.sort_order - b.sort_order)
+      .map((l: { label: string; href: string; type: string }) => ({
+        label: l.label,
+        href: l.href,
+        type: l.type as "demo" | "github",
+      })),
+    repositories: (p.project_repositories ?? [])
+      .sort((a: { sort_order: number }, b: { sort_order: number }) => a.sort_order - b.sort_order)
+      .map((r: { label: string; href: string }) => ({ label: r.label, href: r.href })),
   }));
 }
 
 export async function getAchievements(): Promise<Achievement[]> {
   const { data, error } = await supabase
     .from("achievements")
-    .select("title, description, year, location, latitude, longitude")
+    .select("title, description, year, location")
     .order("sort_order");
 
-  if (error) throw new Error(`Failed to fetch achievements: ${error.message}`);
-  return data;
+  if (error) throw error;
+  return (data ?? []).map((a) => ({
+    ...a,
+    location: a.location ?? undefined,
+  }));
 }
 
-export async function getTechStack(): Promise<TechStack[]> {
+export async function getTechStack(): Promise<TechItem[]> {
   const { data, error } = await supabase
     .from("tech_stack")
-    .select("name, category, icon_url")
+    .select("name, category")
     .order("sort_order");
 
-  if (error) throw new Error(`Failed to fetch tech stack: ${error.message}`);
-  return data as TechStack[];
-}
-
-
-export async function getRecommendations(): Promise<Recommendation[]> {
-  const { data, error } = await supabase
-    .from("recommendations")
-    .select("name, role, company, avatar_url, quote")
-    .order("sort_order");
-
-  if (error) throw new Error(`Failed to fetch recommendations: ${error.message}`);
-  return data;
-}
-
-export async function getPublications(): Promise<Publication[]> {
-  const { data, error } = await supabase
-    .from("publications")
-    .select("title, authors, journal, conference, year, abstract, doi, url, tags")
-    .order("sort_order");
-
-  if (error) throw new Error(`Failed to fetch publications: ${error.message}`);
-  return data;
-}
-
-export async function getCertifications(): Promise<Certification[]> {
-  const { data, error } = await supabase
-    .from("certifications")
-    .select("title, issuer, date_issued, credential_url, description, image_url")
-    .order("sort_order");
-
-  if (error) throw new Error(`Failed to fetch certifications: ${error.message}`);
-  return data;
+  if (error) throw error;
+  return data as TechItem[];
 }

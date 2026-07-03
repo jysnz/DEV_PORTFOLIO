@@ -1,10 +1,12 @@
 export interface SiteConfig {
   name: string;
   title: string;
-  subtitle: string;
-  email: string;
-  copyright: string;
-  hero_image_url?: string | null;
+  description: string;
+  tag?: string;
+  image_url?: string;
+  info: ProjectInfo[];
+  links: ProjectLink[];
+  repositories?: Repository[];
 }
 
 export interface NavLink {
@@ -60,10 +62,14 @@ export interface Achievement {
   image_url?: string | null;
 }
 
-export interface TechStack {
+export interface TechItem {
   name: string;
-  category: "frontend" | "backend" | "mobile" | "database" | "tools";
-  icon_url?: string | null;
+  category: "frontend" | "backend" | "mobile" | "tools" | "database";
+}
+
+export interface NavLink {
+  label: string;
+  href: string;
 }
 
 export interface AboutHighlight {
