@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Kalam, Inter, Patrick_Hand } from "next/font/google";
-import { themeScript } from "@/lib/theme-script";
 import { SketchDefs } from "@/components/sketch/SketchDefs";
 import { PencilTrail } from "@/components/ui/PencilTrail";
 import { SketchSelection } from "@/components/ui/SketchSelection";
+import { ThemeInit } from "@/components/ui/ThemeInit";
 import "./globals.css";
 
 const kalam = Kalam({
@@ -60,10 +60,9 @@ export default function RootLayout({
       className={`${kalam.variable} ${inter.variable} ${patrickHand.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
+      <head />
       <body className="min-h-full flex flex-col font-body bg-paper-bg text-ink">
+        <ThemeInit />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-accent focus:text-accent-contrast focus:rounded-full focus:font-bold"
