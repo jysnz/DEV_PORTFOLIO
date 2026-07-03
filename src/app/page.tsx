@@ -3,6 +3,9 @@ import { Hero } from "@/components/sections/Hero";
 import { Projects } from "@/components/sections/Projects";
 import { TechStackSection } from "@/components/sections/TechStack";
 import { Achievements } from "@/components/sections/Achievements";
+
+// ISR: cache for 1 hour, on-demand revalidation via /api/revalidate
+export const revalidate = 3600;
 import { About } from "@/components/sections/About";
 import { Certifications } from "@/components/sections/Certifications";
 import { Publications } from "@/components/sections/Publications";
