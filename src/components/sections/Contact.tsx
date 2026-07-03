@@ -64,7 +64,7 @@ export function Contact({ siteConfig, socialLinks }: ContactProps) {
             </div>
           </div>
 
-          <Footer copyright={siteConfig.copyright} />
+          <Footer copyright={siteConfig.copyright} className="hidden lg:block text-ink-muted font-body font-medium text-base leading-relaxed" />
         </div>
 
         {/* Right: form */}
@@ -104,6 +104,9 @@ export function Contact({ siteConfig, socialLinks }: ContactProps) {
           )}
         </div>
       </div>
+
+      {/* Mobile/tablet footer - shown at bottom */}
+      <Footer copyright={siteConfig.copyright} className="lg:hidden text-ink-muted font-body font-medium text-base leading-relaxed text-center pt-12" />
     </Section>
   );
 }
