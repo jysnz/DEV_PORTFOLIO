@@ -84,7 +84,7 @@ export default function Image() {
             fontWeight: 500,
           }}
         >
-          jysnz.vercel.app
+          jaysontech.vercel.app
         </div>
       </div>
     ),

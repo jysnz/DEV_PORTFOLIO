@@ -29,7 +29,7 @@ const siteDescription =
 
 export const metadata: Metadata = {
   // Set NEXT_PUBLIC_SITE_URL in production so OG/Twitter image URLs resolve to the real domain.
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://jaysontech.vercel.app"),
   title: siteTitle,
   description: siteDescription,
   openGraph: {
