@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { supabase } from "./supabase";
 import type {
   SiteConfig,
@@ -11,120 +12,158 @@ import type {
   Certification,
 } from "./types";
 
-export async function getSiteConfig(): Promise<SiteConfig> {
-  const { data, error } = await supabase
-    .from("site_config")
-    .select("name, title, subtitle, email, copyright, hero_image_url")
-    .single();
+// Cache duration: 1 year (effectively indefinite since we use on-demand revalidation)
+const CACHE_REVALIDATE = 31536000;
 
-  if (error) throw new Error(`Failed to fetch site config: ${error.message}`);
-  return data;
-}
+export const getSiteConfig = unstable_cache(
+  async (): Promise<SiteConfig> => {
+    const { data, error } = await supabase
+      .from("site_config")
+      .select("name, title, subtitle, email, copyright, hero_image_url")
+      .single();
 
-export async function getNavLinks(): Promise<NavLink[]> {
-  const { data, error } = await supabase
-    .from("nav_links")
-    .select("label, href")
-    .order("sort_order");
+    if (error) throw new Error(`Failed to fetch site config: ${error.message}`);
+    return data;
+  },
+  ["site-config"],
+  { revalidate: CACHE_REVALIDATE, tags: ["site-data"] }
+);
 
-  if (error) throw new Error(`Failed to fetch nav links: ${error.message}`);
-  return data;
-}
+export const getNavLinks = unstable_cache(
+  async (): Promise<NavLink[]> => {
+    const { data, error } = await supabase
+      .from("nav_links")
+      .select("label, href")
+      .order("sort_order");
 
-export async function getSocialLinks(): Promise<SocialLink[]> {
-  const { data, error } = await supabase
-    .from("social_links")
-    .select("label, href, icon")
-    .order("sort_order");
+    if (error) throw new Error(`Failed to fetch nav links: ${error.message}`);
+    return data;
+  },
+  ["nav-links"],
+  { revalidate: CACHE_REVALIDATE, tags: ["site-data"] }
+);
 
-  if (error) throw new Error(`Failed to fetch social links: ${error.message}`);
-  return data as SocialLink[];
-}
+export const getSocialLinks = unstable_cache(
+  async (): Promise<SocialLink[]> => {
+    const { data, error } = await supabase
+      .from("social_links")
+      .select("label, href, icon")
+      .order("sort_order");
 
-export async function getProjects(): Promise<Project[]> {
-  const { data, error } = await supabase
-    .from("projects")
-    .select(`
-      title,
-      description,
-      tag,
-      image_url,
-      project_tech_stack(sort_order, tech_stack(name, icon_url)),
-      project_info(topic, value, sort_order),
-      project_links(label, href, type, sort_order),
-      project_repositories(label, href, sort_order)
-    `)
-    .order("sort_order");
+    if (error) throw new Error(`Failed to fetch social links: ${error.message}`);
+    return data as SocialLink[];
+  },
+  ["social-links"],
+  { revalidate: CACHE_REVALIDATE, tags: ["site-data"] }
+);
 
-  if (error) throw new Error(`Failed to fetch projects: ${error.message}`);
+export const getProjects = unstable_cache(
+  async (): Promise<Project[]> => {
+    const { data, error } = await supabase
+      .from("projects")
+      .select(`
+        title,
+        description,
+        tag,
+        image_url,
+        project_tech_stack(sort_order, tech_stack(name, icon_url)),
+        project_info(topic, value, sort_order),
+        project_links(label, href, type, sort_order),
+        project_repositories(label, href, sort_order)
+      `)
+      .order("sort_order");
 
-  return data.map((project) => ({
-    title: project.title,
-    description: project.description,
-    tag: project.tag,
-    image_url: project.image_url,
-    tech_stack: (project.project_tech_stack as unknown as { sort_order: number; tech_stack: { name: string; icon_url: string | null } }[])
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map(({ tech_stack: ts }) => ({ name: ts.name, icon_url: ts.icon_url })),
-    info: (project.project_info as { topic: string; value: string; sort_order: number }[])
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map(({ topic, value }) => ({ topic, value })),
-    links: (project.project_links as { label: string; href: string; type: string; sort_order: number }[])
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map(({ label, href, type }) => ({ label, href, type: type as "demo" | "github" })),
-    repositories: (project.project_repositories as { label: string; href: string; sort_order: number }[])
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map(({ label, href }) => ({ label, href })),
-  }));
-}
+    if (error) throw new Error(`Failed to fetch projects: ${error.message}`);
 
-export async function getAchievements(): Promise<Achievement[]> {
-  const { data, error } = await supabase
-    .from("achievements")
-    .select("title, description, year, location, latitude, longitude, image_url")
-    .order("sort_order");
+    return data.map((project) => ({
+      title: project.title,
+      description: project.description,
+      tag: project.tag,
+      image_url: project.image_url,
+      tech_stack: (project.project_tech_stack as unknown as { sort_order: number; tech_stack: { name: string; icon_url: string | null } }[])
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map(({ tech_stack: ts }) => ({ name: ts.name, icon_url: ts.icon_url })),
+      info: (project.project_info as { topic: string; value: string; sort_order: number }[])
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map(({ topic, value }) => ({ topic, value })),
+      links: (project.project_links as { label: string; href: string; type: string; sort_order: number }[])
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map(({ label, href, type }) => ({ label, href, type: type as "demo" | "github" })),
+      repositories: (project.project_repositories as { label: string; href: string; sort_order: number }[])
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map(({ label, href }) => ({ label, href })),
+    }));
+  },
+  ["projects"],
+  { revalidate: CACHE_REVALIDATE, tags: ["site-data"] }
+);
 
-  if (error) throw new Error(`Failed to fetch achievements: ${error.message}`);
-  return data;
-}
+export const getAchievements = unstable_cache(
+  async (): Promise<Achievement[]> => {
+    const { data, error } = await supabase
+      .from("achievements")
+      .select("title, description, year, location, latitude, longitude, image_url")
+      .order("sort_order");
 
-export async function getTechStack(): Promise<TechStack[]> {
-  const { data, error } = await supabase
-    .from("tech_stack")
-    .select("name, category, icon_url")
-    .order("sort_order");
+    if (error) throw new Error(`Failed to fetch achievements: ${error.message}`);
+    return data;
+  },
+  ["achievements"],
+  { revalidate: CACHE_REVALIDATE, tags: ["site-data"] }
+);
 
-  if (error) throw new Error(`Failed to fetch tech stack: ${error.message}`);
-  return data as TechStack[];
-}
+export const getTechStack = unstable_cache(
+  async (): Promise<TechStack[]> => {
+    const { data, error } = await supabase
+      .from("tech_stack")
+      .select("name, category, icon_url")
+      .order("sort_order");
 
+    if (error) throw new Error(`Failed to fetch tech stack: ${error.message}`);
+    return data as TechStack[];
+  },
+  ["tech-stack"],
+  { revalidate: CACHE_REVALIDATE, tags: ["site-data"] }
+);
 
-export async function getRecommendations(): Promise<Recommendation[]> {
-  const { data, error } = await supabase
-    .from("recommendations")
-    .select("name, role, company, avatar_url, quote")
-    .order("sort_order");
+export const getRecommendations = unstable_cache(
+  async (): Promise<Recommendation[]> => {
+    const { data, error } = await supabase
+      .from("recommendations")
+      .select("name, role, company, avatar_url, quote")
+      .order("sort_order");
 
-  if (error) throw new Error(`Failed to fetch recommendations: ${error.message}`);
-  return data;
-}
+    if (error) throw new Error(`Failed to fetch recommendations: ${error.message}`);
+    return data;
+  },
+  ["recommendations"],
+  { revalidate: CACHE_REVALIDATE, tags: ["site-data"] }
+);
 
-export async function getPublications(): Promise<Publication[]> {
-  const { data, error } = await supabase
-    .from("publications")
-    .select("title, authors, journal, conference, year, abstract, doi, url, tags")
-    .order("sort_order");
+export const getPublications = unstable_cache(
+  async (): Promise<Publication[]> => {
+    const { data, error } = await supabase
+      .from("publications")
+      .select("title, authors, journal, conference, year, abstract, doi, url, tags")
+      .order("sort_order");
 
-  if (error) throw new Error(`Failed to fetch publications: ${error.message}`);
-  return data;
-}
+    if (error) throw new Error(`Failed to fetch publications: ${error.message}`);
+    return data;
+  },
+  ["publications"],
+  { revalidate: CACHE_REVALIDATE, tags: ["site-data"] }
+);
 
-export async function getCertifications(): Promise<Certification[]> {
-  const { data, error } = await supabase
-    .from("certifications")
-    .select("title, issuer, date_issued, credential_url, description, image_url")
-    .order("sort_order");
+export const getCertifications = unstable_cache(
+  async (): Promise<Certification[]> => {
+    const { data, error } = await supabase
+      .from("certifications")
+      .select("title, issuer, date_issued, credential_url, description, image_url")
+      .order("sort_order");
 
-  if (error) throw new Error(`Failed to fetch certifications: ${error.message}`);
-  return data;
-}
+    if (error) throw new Error(`Failed to fetch certifications: ${error.message}`);
+    return data;
+  },
+  ["certifications"],
+  { revalidate: CACHE_REVALIDATE, tags: ["site-data"] }
+);
