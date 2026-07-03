@@ -8,7 +8,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     fetch: (url, options = {}) => {
       return fetch(url, {
         ...options,
-        next: { revalidate: 3600 },
+        next: { revalidate: 60 },
       } as RequestInit);
     },
   },
