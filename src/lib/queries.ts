@@ -7,6 +7,8 @@ import type {
   Achievement,
   TechStack,
   Recommendation,
+  Publication,
+  Certification,
 } from "./types";
 
 export async function getSiteConfig(): Promise<SiteConfig> {
@@ -104,5 +106,25 @@ export async function getRecommendations(): Promise<Recommendation[]> {
     .order("sort_order");
 
   if (error) throw new Error(`Failed to fetch recommendations: ${error.message}`);
+  return data;
+}
+
+export async function getPublications(): Promise<Publication[]> {
+  const { data, error } = await supabase
+    .from("publications")
+    .select("title, authors, journal, conference, year, abstract, doi, url, tags")
+    .order("sort_order");
+
+  if (error) throw new Error(`Failed to fetch publications: ${error.message}`);
+  return data;
+}
+
+export async function getCertifications(): Promise<Certification[]> {
+  const { data, error } = await supabase
+    .from("certifications")
+    .select("title, issuer, date_issued, credential_url, description, image_url")
+    .order("sort_order");
+
+  if (error) throw new Error(`Failed to fetch certifications: ${error.message}`);
   return data;
 }

@@ -5,6 +5,8 @@ import { IconButton } from "@/components/ui/IconButton";
 import { LinkedInIcon, GitHubIcon } from "@/assets/icons";
 import { Stack } from "@/components/ui/Stack";
 import { StackSketchCard } from "@/components/ui/StackSketchCard";
+import { SketchBorder } from "@/components/sketch/SketchBorder";
+import { useRoughShape } from "@/hooks/useRoughShape";
 import type { SiteConfig, SocialLink } from "@/lib/types";
 
 const stackImages = [
@@ -19,6 +21,13 @@ export interface HeroProps {
 }
 
 export function Hero({ siteConfig, socialLinks }: HeroProps) {
+  const { containerRef, svgRef, ready } = useRoughShape<HTMLDivElement>({
+    shape: "rect",
+    radius: 16,
+    strokeWidth: 2,
+    roughness: 1.8,
+  });
+
   return (
     <section
       id="home"
@@ -48,24 +57,30 @@ export function Hero({ siteConfig, socialLinks }: HeroProps) {
             </div>
           </div>
 
-          {/* Hero image stack */}
-          <div className="relative mx-auto lg:mx-0 shrink-0 w-[200px] h-[260px] sm:w-[220px] sm:h-[290px] lg:w-[280px] lg:h-[370px] xl:w-[320px] xl:h-[420px]">
-            <Stack
-              randomRotation={true}
-              sensitivity={180}
-              sendToBackOnClick={true}
-              autoplay={true}
-              autoplayDelay={4000}
-              pauseOnHover={true}
-              cards={stackImages.map((img, i) => (
-                <StackSketchCard
-                  key={i}
-                  src={img.src}
-                  sketchSrc={img.sketchSrc}
-                  alt={img.alt}
-                />
-              ))}
-            />
+          {/* Hero image stack with sketch border */}
+          <div
+            ref={containerRef}
+            className={`relative mx-auto lg:mx-0 shrink-0 w-[200px] h-[260px] sm:w-[220px] sm:h-[290px] lg:w-[280px] lg:h-[370px] xl:w-[320px] xl:h-[420px] p-3 ${ready ? "border-transparent" : "border border-line/20"} rounded-lg`}
+          >
+            <div className="relative w-full h-full overflow-hidden rounded-md">
+              <Stack
+                randomRotation={true}
+                sensitivity={180}
+                sendToBackOnClick={true}
+                autoplay={true}
+                autoplayDelay={4000}
+                pauseOnHover={true}
+                cards={stackImages.map((img, i) => (
+                  <StackSketchCard
+                    key={i}
+                    src={img.src}
+                    sketchSrc={img.sketchSrc}
+                    alt={img.alt}
+                  />
+                ))}
+              />
+            </div>
+            <SketchBorder svgRef={svgRef} />
           </div>
         </div>
       </div>

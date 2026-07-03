@@ -86,3 +86,25 @@ export interface Recommendation {
   avatar_url?: string | null;
   quote: string;
 }
+
+export interface Publication {
+  title: string;
+  authors: string;
+  journal?: string | null;
+  conference?: string | null;
+  year: string;
+  abstract?: string | null;
+  doi?: string | null;
+  url?: string | null;
+  tags: string[];
+}
+
+
+export interface Certification {
+  title: string;
+  issuer: string;
+  date_issued: string;
+  credential_url?: string | null;
+  description?: string | null;
+  image_url?: string | null;
+}
