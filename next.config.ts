@@ -9,8 +9,6 @@ const nextConfig: NextConfig = {
         pathname: "/storage/v1/object/public/**",
       },
     ],
-    // Cache optimized images for 30 days (in seconds)
-    minimumCacheTTL: 2592000,
   },
 };
 
