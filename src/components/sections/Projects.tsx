@@ -11,7 +11,7 @@ export function Projects({ projects }: ProjectsProps) {
     <Section id="projects" divider ariaLabel="Featured Projects">
       <div className="flex flex-col gap-16 lg:gap-20">
         {/* Header */}
-        <div className="flex flex-col gap-2 max-w-[600px]">
+        <div className="flex flex-col gap-2 max-w-[600px] items-center text-center mx-auto">
           <h2 className="font-display text-[40px] md:text-[56px] lg:text-[76px] leading-none text-ink">
             Featured Projects
           </h2>

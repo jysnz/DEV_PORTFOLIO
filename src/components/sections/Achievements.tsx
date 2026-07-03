@@ -11,7 +11,7 @@ export function Achievements({ achievements }: AchievementsProps) {
     <Section id="achievements" divider ariaLabel="Achievements">
       <div className="flex flex-col gap-10 lg:gap-12">
         {/* Title */}
-        <div>
+        <div className="text-center">
           <h2 className="font-display text-[40px] md:text-[56px] lg:text-[76px] leading-none text-ink">
             Achievements
           </h2>

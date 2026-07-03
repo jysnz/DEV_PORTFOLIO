@@ -8,6 +8,8 @@ import { SketchBorder } from "@/components/sketch/SketchBorder";
 export interface ButtonProps {
   children: React.ReactNode;
   href?: string;
+  target?: string;
+  rel?: string;
   variant?: "primary" | "submit";
   className?: string;
   type?: "button" | "submit";
@@ -17,6 +19,8 @@ export interface ButtonProps {
 export function Button({
   children,
   href,
+  target,
+  rel,
   variant = "primary",
   className,
   type = "button",
@@ -55,6 +59,8 @@ export function Button({
       <a
         ref={containerRef as React.Ref<HTMLAnchorElement>}
         href={href}
+        target={target}
+        rel={target === "_blank" ? "noopener noreferrer" : rel}
         className={cn(baseStyles, variantStyles[variant], className)}
       >
         {content}
