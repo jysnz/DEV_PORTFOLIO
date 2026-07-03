@@ -1,5 +1,9 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { ArrowUpRightIcon } from "@/assets/icons";
+import { useRoughShape } from "@/hooks/useRoughShape";
+import { SketchBorder } from "@/components/sketch/SketchBorder";
 
 export interface ButtonProps {
   children: React.ReactNode;
@@ -34,7 +38,8 @@ export function Button({
 
   const content = (
     <>
-      <span>{children}</span>
+      <SketchBorder svgRef={svgRef} emphasisSvgRef={emphasisSvgRef} hoverEmphasis />
+      <span className="relative">{children}</span>
       {variant === "primary" && (
         <span className="flex items-center justify-center size-[38px] rounded-full bg-text-dark/15 transition-transform duration-300 group-hover:rotate-45">
           <ArrowUpRightIcon className="size-4 text-text-dark" />
@@ -45,7 +50,11 @@ export function Button({
 
   if (href) {
     return (
-      <a href={href} className={cn(baseStyles, variantStyles[variant], className)}>
+      <a
+        ref={containerRef as React.Ref<HTMLAnchorElement>}
+        href={href}
+        className={cn(baseStyles, variantStyles[variant], className)}
+      >
         {content}
       </a>
     );
@@ -53,6 +62,7 @@ export function Button({
 
   return (
     <button
+      ref={containerRef as React.Ref<HTMLButtonElement>}
       type={type}
       onClick={onClick}
       disabled={disabled}

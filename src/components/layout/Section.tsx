@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { SketchDivider } from "@/components/sketch/SketchDivider";
 
 export interface SectionProps {
   id?: string;
@@ -19,6 +20,7 @@ export function Section({ id, children, className, divider = false, ariaLabel }:
         className
       )}
     >
+      {divider && <SketchDivider />}
       {children}
     </section>
   );

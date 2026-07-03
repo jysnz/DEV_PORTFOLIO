@@ -1,4 +1,5 @@
-import Image from "next/image";
+"use client";
+
 import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import { GradualBlur } from "@/components/ui/GradualBlur";

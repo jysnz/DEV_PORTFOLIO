@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <!-- 3D Pencil cursor - tip at exactly (28, 28), angled top-left to bottom-right -->
+  <defs>
+    <linearGradient id="barrel" x1="0%" y1="0%" x2="100%" y2="0%" gradientTransform="rotate(45)">
+      <stop offset="0%" stop-color="#5A4E44"/>
+      <stop offset="30%" stop-color="#8B7D6E"/>
+      <stop offset="50%" stop-color="#A69888"/>
+      <stop offset="70%" stop-color="#8B7D6E"/>
+      <stop offset="100%" stop-color="#6B5E52"/>
+    </linearGradient>
+    <linearGradient id="wood" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F0C878"/>
+      <stop offset="50%" stop-color="#E8B860"/>
+      <stop offset="100%" stop-color="#B88840"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4D4D4"/>
+      <stop offset="40%" stop-color="#F0F0F0"/>
+      <stop offset="70%" stop-color="#B0B0B0"/>
+      <stop offset="100%" stop-color="#707070"/>
+    </linearGradient>
+    <linearGradient id="eraser" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F0A8A8"/>
+      <stop offset="60%" stop-color="#D08080"/>
+      <stop offset="100%" stop-color="#B06060"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Shadow offset for 3D depth -->
+  <line x1="6" y1="5" x2="27" y2="27" stroke="rgba(0,0,0,0.12)" stroke-width="5" stroke-linecap="round"/>
+  
+  <!-- Pencil barrel - diagonal from top-left to bottom-right -->
+  <line x1="7" y1="7" x2="22" y2="22" stroke="url(#barrel)" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Barrel highlight -->
+  <line x1="7.5" y1="6.5" x2="21.5" y2="21" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round"/>
+  
+  <!-- Metal ferrule band -->
+  <line x1="5.5" y1="5.5" x2="8" y2="8" stroke="url(#metal)" stroke-width="4.5" stroke-linecap="butt"/>
+  
+  <!-- Eraser -->
+  <line x1="3.5" y1="3.5" x2="5.5" y2="5.5" stroke="url(#eraser)" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Wood/sharpened cone -->
+  <polygon points="21,20 24,23 28,28 20,24" fill="url(#wood)" stroke="#8B6914" stroke-width="0.3"/>
+  
+  <!-- Graphite tip -->
+  <polygon points="25,25 27,27 28,28 26,26" fill="#2A2A2A"/>
+  
+  <!-- Tip point -->
+  <circle cx="28" cy="28" r="0.7" fill="#1A1A1A"/>
+</svg>

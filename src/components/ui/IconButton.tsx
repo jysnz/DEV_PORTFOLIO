@@ -1,4 +1,8 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import { useRoughShape } from "@/hooks/useRoughShape";
+import { SketchBorder } from "@/components/sketch/SketchBorder";
 
 export interface IconButtonProps {
   href: string;
@@ -8,8 +12,14 @@ export interface IconButtonProps {
 }
 
 export function IconButton({ href, label, children, className }: IconButtonProps) {
+  const { containerRef, svgRef, emphasisSvgRef, ready } = useRoughShape<HTMLAnchorElement>({
+    radius: 27,
+    withEmphasis: true,
+  });
+
   return (
     <a
+      ref={containerRef}
       href={href}
       aria-label={label}
       target="_blank"
@@ -19,7 +29,8 @@ export function IconButton({ href, label, children, className }: IconButtonProps
         className
       )}
     >
-      {children}
+      <SketchBorder svgRef={svgRef} emphasisSvgRef={emphasisSvgRef} hoverEmphasis />
+      <span className="relative">{children}</span>
     </a>
   );
 }

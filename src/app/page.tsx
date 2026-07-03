@@ -4,6 +4,9 @@ import { Projects } from "@/components/sections/Projects";
 import { TechStack } from "@/components/sections/TechStack";
 import { Achievements } from "@/components/sections/Achievements";
 import { About } from "@/components/sections/About";
+import { Certifications } from "@/components/sections/Certifications";
+import { Publications } from "@/components/sections/Publications";
+import { Recommendations } from "@/components/sections/Recommendations";
 import { Contact } from "@/components/sections/Contact";
 import { ClientBeams } from "@/components/3d/ClientBeams";
 import {

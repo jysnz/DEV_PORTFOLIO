@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 /*
   Spacing conventions (Tailwind steps):
@@ -39,8 +40,39 @@ html {
 }
 
 body {
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background-color: var(--color-paper-bg);
+  color: var(--color-ink);
+  cursor: url('/cursors/pencil.svg') 28 28, auto;
+  /* Notebook ruled lines */
+  background-image:
+    /* Red margin line */
+    linear-gradient(
+      to right,
+      transparent 59px,
+      color-mix(in srgb, var(--accent-pencil) 30%, transparent) 59px,
+      color-mix(in srgb, var(--accent-pencil) 30%, transparent) 60px,
+      transparent 60px
+    ),
+    /* Horizontal ruled lines */
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 31px,
+      color-mix(in srgb, var(--graphite-ink) 7%, transparent) 31px,
+      color-mix(in srgb, var(--graphite-ink) 7%, transparent) 32px
+    );
+  background-size: 100% 32px;
+  background-attachment: local;
+}
+
+/* Pencil pointer cursor for interactive elements */
+a,
+button,
+[role="button"],
+input[type="submit"],
+select,
+.cursor-pointer {
+  cursor: url('/cursors/pencil-pointer.svg') 28 28, pointer;
 }
 
 /* Glassmorphism base */
@@ -252,6 +284,29 @@ button:focus-visible,
   pointer-events: none;
   opacity: 0.015;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Remove default focus outline on form inputs - sketch border handles focus state */
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
+/* Desaturated / pencil-sketch photo treatment */
+.pencil-photo {
+  filter: grayscale(0.85) sepia(0.12) contrast(1.1) saturate(0.5);
+}
+
+/* Redraw-on-hover underline (LinkButton) */
+.sketch-underline-path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.35s ease-out;
+}
+
+.group:hover .sketch-underline-path,
+.group:focus-visible .sketch-underline-path {
+  stroke-dashoffset: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

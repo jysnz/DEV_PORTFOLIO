@@ -31,6 +31,12 @@ export const socialLinksFallback: SocialLink[] = [
 
 export const aboutDescriptionFallback = {
   headline:
-    "I am a full stack developer. A 4th Year Information Technology Student at Quezon City University. And a national player for VEX Robotics World Championship",
-  body: "I am a full-stack developer and 4th-year Information Technology student at Quezon City University. As a Philippine representative in the VEX Robotics World Championship held in St. Louis, Missouri, I bring discipline, teamwork, and sharp problem-solving to every project I build. I focus on creating accessible, user-centered applications using modern technologies like React, Next.js, Flutter, and Python. When I'm not coding, you'll find me tinkering with robots, exploring new frameworks, or competing in tech competitions. Always learning, always building.",
+    "Developer, competitor, builder — I turn complex problems into elegant solutions.",
+  body: "I'm a full-stack developer and 4th-year IT student at Quezon City University with a passion for building accessible, performant web applications. As a Philippine national representative at the VEX Robotics World Championship in Dallas, Texas, I bring the same precision and teamwork from competitive robotics into every line of code I write.",
+  philosophy:
+    "I believe great software starts with empathy — understanding what users actually need, then crafting experiences that feel effortless. Whether it's a responsive UI, a robust API, or an autonomous robot, the goal is always the same: solve real problems with clean, maintainable solutions.",
+  highlights: [
+    { label: "Focus", value: "Full-Stack Web & Mobile" },
+    { label: "Experience", value: "VEX Worlds Representative" },
+  ],
 };

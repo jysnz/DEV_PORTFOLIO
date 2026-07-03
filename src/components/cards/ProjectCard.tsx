@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { ProjectTag } from "@/components/ui/ProjectTag";
 import { LinkButton } from "@/components/ui/LinkButton";
@@ -13,6 +14,11 @@ export interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, className }: ProjectCardProps) {
+  const { containerRef, svgRef, emphasisSvgRef, ready } = useRoughShape<HTMLElement>({
+    radius: 12,
+    withEmphasis: true,
+  });
+
   return (
     <TiltCard tiltAmount={3} className="h-full">
       <BorderGlow
