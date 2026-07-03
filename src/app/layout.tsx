@@ -38,14 +38,11 @@ export const metadata: Metadata = {
     siteName: "Jayson Dela Cruz",
     type: "website",
     locale: "en_US",
-    // TODO: supply a real 1200x630 sketch-styled preview image at this path.
-    images: ["/images/og-image.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    images: ["/images/og-image.png"],
   },
 };
 
