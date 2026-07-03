@@ -56,7 +56,7 @@ export function About({ contributions }: AboutProps) {
         </h2>
 
         {/* Main content: image stack + description in sketch box */}
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center lg:items-start">
           {/* Image stack with sketch border */}
           <div
             ref={imageRef}

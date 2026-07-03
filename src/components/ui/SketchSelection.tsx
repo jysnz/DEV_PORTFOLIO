@@ -92,7 +92,7 @@ export function SketchSelection() {
     <svg
       ref={svgRef}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-[9998] w-full h-full overflow-visible"
+      className="pointer-events-none fixed inset-0 z-[9998] w-full h-full"
     >
       {rects.map((rect, i) => (
         <path

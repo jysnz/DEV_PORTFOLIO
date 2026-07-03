@@ -57,11 +57,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${kalam.variable} ${inter.variable} ${patrickHand.variable} h-full antialiased`}
+      className={`${kalam.variable} ${inter.variable} ${patrickHand.variable} h-full antialiased overflow-x-hidden`}
       suppressHydrationWarning
     >
       <head />
-      <body className="min-h-full flex flex-col font-body bg-paper-bg text-ink">
+      <body className="min-h-full flex flex-col font-body bg-paper-bg text-ink overflow-x-hidden">
         <ThemeInit />
         <a
           href="#main-content"

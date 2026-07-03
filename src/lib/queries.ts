@@ -81,7 +81,7 @@ export async function getProjects(): Promise<Project[]> {
 export async function getAchievements(): Promise<Achievement[]> {
   const { data, error } = await supabase
     .from("achievements")
-    .select("title, description, year, location, latitude, longitude")
+    .select("title, description, year, location, latitude, longitude, image_url")
     .order("sort_order");
 
   if (error) throw new Error(`Failed to fetch achievements: ${error.message}`);
