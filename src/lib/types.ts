@@ -66,7 +66,23 @@ export interface TechStack {
   icon_url?: string | null;
 }
 
+export interface AboutHighlight {
+  label: string;
+  value: string;
+}
+
 export interface AboutDescription {
   headline: string;
   body: string;
+  philosophy: string;
+  highlights: AboutHighlight[];
+}
+
+
+export interface Recommendation {
+  name: string;
+  role: string;
+  company?: string | null;
+  avatar_url?: string | null;
+  quote: string;
 }

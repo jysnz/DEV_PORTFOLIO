@@ -4,6 +4,7 @@ import { Projects } from "@/components/sections/Projects";
 import { TechStackSection } from "@/components/sections/TechStack";
 import { Achievements } from "@/components/sections/Achievements";
 import { About } from "@/components/sections/About";
+import { Recommendations } from "@/components/sections/Recommendations";
 import { Contact } from "@/components/sections/Contact";
 import {
   getSiteConfig,
@@ -12,10 +13,12 @@ import {
   getProjects,
   getAchievements,
   getTechStack,
+  getRecommendations,
 } from "@/lib/queries";
+import { getGitHubContributions } from "@/lib/github";
 
 export default async function Home() {
-  const [siteConfig, navLinks, socialLinks, projects, achievements, techStack] =
+  const [siteConfig, navLinks, socialLinks, projects, achievements, techStack, contributions, recommendations] =
     await Promise.all([
       getSiteConfig(),
       getNavLinks(),
@@ -23,6 +26,8 @@ export default async function Home() {
       getProjects(),
       getAchievements(),
       getTechStack(),
+      getGitHubContributions(),
+      getRecommendations(),
     ]);
 
   return (
@@ -33,7 +38,8 @@ export default async function Home() {
         <Projects projects={projects} />
         <TechStackSection techStack={techStack} />
         <Achievements achievements={achievements} />
-        <About />
+        <About contributions={contributions} />
+        <Recommendations recommendations={recommendations} />
         <Contact siteConfig={siteConfig} socialLinks={socialLinks} />
       </main>
     </>

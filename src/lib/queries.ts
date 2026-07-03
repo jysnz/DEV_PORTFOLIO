@@ -6,6 +6,7 @@ import type {
   Project,
   Achievement,
   TechStack,
+  Recommendation,
 } from "./types";
 
 export async function getSiteConfig(): Promise<SiteConfig> {
@@ -93,4 +94,15 @@ export async function getTechStack(): Promise<TechStack[]> {
 
   if (error) throw new Error(`Failed to fetch tech stack: ${error.message}`);
   return data as TechStack[];
+}
+
+
+export async function getRecommendations(): Promise<Recommendation[]> {
+  const { data, error } = await supabase
+    .from("recommendations")
+    .select("name, role, company, avatar_url, quote")
+    .order("sort_order");
+
+  if (error) throw new Error(`Failed to fetch recommendations: ${error.message}`);
+  return data;
 }
