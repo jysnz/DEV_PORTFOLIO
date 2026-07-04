@@ -36,11 +36,22 @@ export default async function Home() {
   ]);
   const criticalDuration = performance.now() - criticalStart;
 
+  // Cache analytics
+  const isDev = process.env.NODE_ENV === "development";
   console.log("\n┌─────────────────────────────────────────────────────┐");
-  console.log("│       📊 CRITICAL PATH (above-the-fold)             │");
+  console.log("│           📊 PAGE RENDER ANALYTICS                  │");
+  console.log("├─────────────────────────────────────────────────────┤");
+  if (isDev) {
+    console.log("│ ⚠️  DEV MODE — cache disabled, always fetches fresh  │");
+  } else if (criticalDuration < 10) {
+    console.log("│ ✅ SERVING FROM CACHE — no data changes detected    │");
+  } else {
+    console.log("│ 🔄 FRESH FETCH — cache miss or invalidated          │");
+  }
   console.log("├─────────────────────────────────────────────────────┤");
   const status = criticalDuration > 500 ? "🔴" : criticalDuration > 200 ? "🟡" : "🟢";
-  console.log(`│ ${status} navbar + hero data:  ${criticalDuration.toFixed(1).padStart(8)}ms              │`);
+  console.log(`│ ${status} Critical path:      ${criticalDuration.toFixed(1).padStart(8)}ms              │`);
+  console.log(`│ 📅 Rendered at:       ${new Date().toISOString()}  │`);
   console.log("└─────────────────────────────────────────────────────┘\n");
 
   return (

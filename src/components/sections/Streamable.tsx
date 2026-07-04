@@ -19,9 +19,12 @@ import {
 import { getGitHubContributions } from "@/lib/github";
 
 function logStreamTiming(name: string, duration: number) {
+  const isDev = process.env.NODE_ENV === "development";
+  const isCached = !isDev && duration < 10;
   const status = duration > 500 ? "🔴" : duration > 200 ? "🟡" : "🟢";
+  const cacheLabel = isDev ? "[DEV]   " : isCached ? "[CACHED]" : "[FRESH] ";
   const bar = "█".repeat(Math.round(duration / 10));
-  console.log(`│ ${status} ${name.padEnd(18)} ${duration.toFixed(1).padStart(8)}ms  ${bar}`);
+  console.log(`│ ${status} ${cacheLabel} ${name.padEnd(16)} ${duration.toFixed(1).padStart(7)}ms  ${bar}`);
 }
 
 export async function StreamableProjects() {
