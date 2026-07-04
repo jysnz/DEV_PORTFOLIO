@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState, useRef } from "react";
 import { geoOrthographic, geoPath, geoGraticule } from "d3-geo";
 import { feature } from "topojson-client";
 import { cn } from "@/lib/utils";
@@ -17,6 +17,8 @@ export interface LocationGlobeProps {
 }
 
 export function LocationGlobe({ location, latitude, longitude, className }: LocationGlobeProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const { containerRef, svgRef, emphasisSvgRef, ready } = useRoughShape<HTMLDivElement>({
     radius: 12,
     withEmphasis: false,
@@ -33,6 +35,23 @@ export function LocationGlobe({ location, latitude, longitude, className }: Loca
       })
       .catch(() => {});
   }, []);
+
+  // Close on outside click
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside as EventListener);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside as EventListener);
+    };
+  }, [isOpen]);
 
   const size = 150;
   const cx = size / 2;
@@ -62,18 +81,36 @@ export function LocationGlobe({ location, latitude, longitude, className }: Loca
   }, [landData, latitude, longitude, cx, cy, r]);
 
   return (
-    <div className={cn("relative group/location inline-flex items-center gap-1.5", className)}>
+    <div ref={wrapperRef} className={cn("relative group/location inline-flex items-center gap-1.5", className)}>
       {/* Location trigger */}
-      <svg className="size-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-      </svg>
-      <span className="font-body font-medium text-sm text-ink-muted/70 cursor-pointer transition-colors duration-150 group-hover/location:text-accent">
-        {location}
-      </span>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="inline-flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+        aria-expanded={isOpen}
+        aria-label={`Show location: ${location}`}
+      >
+        <svg className="size-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+        </svg>
+        <span className="font-body font-medium text-sm text-ink-muted/70 cursor-pointer transition-colors duration-150 group-hover/location:text-accent">
+          {location}
+        </span>
+      </button>
 
-      {/* Globe popup - appears to the right */}
-      <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 z-50 opacity-0 invisible translate-x-1 transition-all duration-200 group-hover/location:opacity-100 group-hover/location:visible group-hover/location:translate-x-0">
+      {/* Globe popup - appears to the right on desktop, below on mobile */}
+      <div
+        className={cn(
+          "absolute z-50 transition-all duration-200",
+          "lg:left-full lg:top-1/2 lg:-translate-y-1/2 lg:ml-3",
+          "left-0 top-full mt-2 lg:mt-0",
+          isOpen
+            ? "opacity-100 visible translate-x-0 translate-y-0"
+            : "opacity-0 invisible lg:translate-x-1 translate-y-1 lg:translate-y-0",
+          "group-hover/location:opacity-100 group-hover/location:visible group-hover/location:translate-x-0 group-hover/location:translate-y-0"
+        )}
+      >
         <div
           ref={containerRef}
           className={cn(

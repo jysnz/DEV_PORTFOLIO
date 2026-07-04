@@ -28,11 +28,20 @@ export const revalidate = 3600;
 
 export default async function Home() {
   // Fetch only critical above-the-fold data eagerly (navbar + hero)
+  const criticalStart = performance.now();
   const [siteConfig, navLinks, socialLinks] = await Promise.all([
     getSiteConfig(),
     getNavLinks(),
     getSocialLinks(),
   ]);
+  const criticalDuration = performance.now() - criticalStart;
+
+  console.log("\n┌─────────────────────────────────────────────────────┐");
+  console.log("│       📊 CRITICAL PATH (above-the-fold)             │");
+  console.log("├─────────────────────────────────────────────────────┤");
+  const status = criticalDuration > 500 ? "🔴" : criticalDuration > 200 ? "🟡" : "🟢";
+  console.log(`│ ${status} navbar + hero data:  ${criticalDuration.toFixed(1).padStart(8)}ms              │`);
+  console.log("└─────────────────────────────────────────────────────┘\n");
 
   return (
     <>

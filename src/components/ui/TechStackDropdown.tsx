@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useRoughShape } from "@/hooks/useRoughShape";
@@ -12,18 +13,39 @@ export interface TechStackDropdownProps {
 }
 
 export function TechStackDropdown({ techStack, className }: TechStackDropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const { containerRef, svgRef, emphasisSvgRef, ready } = useRoughShape<HTMLDivElement>({
     radius: 8,
     withEmphasis: false,
   });
 
+  // Close on outside click
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside as EventListener);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside as EventListener);
+    };
+  }, [isOpen]);
+
   return (
-    <div className={cn("relative group/techstack inline-block", className)}>
+    <div ref={dropdownRef} className={cn("relative group/techstack inline-block", className)}>
       {/* Trigger */}
       <button
         type="button"
+        onClick={() => setIsOpen(!isOpen)}
         className="inline-flex flex-col gap-1 items-start focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
         aria-haspopup="true"
+        aria-expanded={isOpen}
       >
         <span className="inline-flex items-center gap-1 text-accent font-body font-bold text-base uppercase leading-normal">
           Tech Stack
@@ -60,8 +82,18 @@ export function TechStackDropdown({ techStack, className }: TechStackDropdownPro
         </svg>
       </button>
 
-      {/* Dropdown - appears to the right */}
-      <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 z-50 min-w-[220px] max-w-[280px] opacity-0 invisible translate-x-1 transition-all duration-200 group-hover/techstack:opacity-100 group-hover/techstack:visible group-hover/techstack:translate-x-0">
+      {/* Dropdown - appears to the right on desktop, below on mobile */}
+      <div
+        className={cn(
+          "absolute z-50 min-w-[220px] max-w-[280px] transition-all duration-200",
+          "lg:left-full lg:top-1/2 lg:-translate-y-1/2 lg:ml-3",
+          "left-0 top-full mt-2 lg:mt-0",
+          isOpen
+            ? "opacity-100 visible translate-x-0 translate-y-0"
+            : "opacity-0 invisible lg:translate-x-1 translate-y-1 lg:translate-y-0",
+          "group-hover/techstack:opacity-100 group-hover/techstack:visible group-hover/techstack:translate-x-0 group-hover/techstack:translate-y-0"
+        )}
+      >
         <div
           ref={containerRef}
           className={cn(
