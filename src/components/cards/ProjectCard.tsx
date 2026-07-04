@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { BlurImage } from "@/components/ui/BlurImage";
 import { ProjectTag } from "@/components/ui/ProjectTag";
 import { LinkButton } from "@/components/ui/LinkButton";
 import { GithubLinksDropdown } from "@/components/ui/GithubLinksDropdown";
@@ -38,12 +38,11 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
       {/* Project image placeholder */}
       <div className="relative shrink-0 w-full h-[180px] lg:h-[200px] rounded-md overflow-hidden bg-bg-card">
         {project.image_url ? (
-          <Image
+          <BlurImage
             src={project.image_url}
             alt={project.title}
-            fill
-            className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            containerClassName="w-full h-full"
           />
         ) : (
           <div className="flex items-center justify-center w-full h-full">

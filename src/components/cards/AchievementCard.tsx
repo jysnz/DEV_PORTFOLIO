@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { BlurImage } from "@/components/ui/BlurImage";
 import { ProjectTag } from "@/components/ui/ProjectTag";
 import { LocationGlobe } from "@/components/ui/LocationGlobe";
 import { useRoughShape } from "@/hooks/useRoughShape";
@@ -33,12 +33,11 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
       {/* Image placeholder */}
       <div className="relative shrink-0 w-full h-[160px] rounded-md overflow-hidden bg-bg-card">
         {achievement.image_url ? (
-          <Image
+          <BlurImage
             src={achievement.image_url}
             alt={achievement.title}
-            fill
-            className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            containerClassName="w-full h-full"
           />
         ) : (
           <div className="flex items-center justify-center w-full h-full">
