@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { supabase } from "./supabase";
 import type {
   SiteConfig,
@@ -11,7 +12,7 @@ import type {
   Certification,
 } from "./types";
 
-export async function getSiteConfig(): Promise<SiteConfig> {
+export const getSiteConfig = cache(async (): Promise<SiteConfig> => {
   const { data, error } = await supabase
     .from("site_config")
     .select("name, title, subtitle, email, copyright, hero_image_url")
@@ -19,9 +20,9 @@ export async function getSiteConfig(): Promise<SiteConfig> {
 
   if (error) throw new Error(`Failed to fetch site config: ${error.message}`);
   return data;
-}
+});
 
-export async function getNavLinks(): Promise<NavLink[]> {
+export const getNavLinks = cache(async (): Promise<NavLink[]> => {
   const { data, error } = await supabase
     .from("nav_links")
     .select("label, href")
@@ -29,9 +30,9 @@ export async function getNavLinks(): Promise<NavLink[]> {
 
   if (error) throw new Error(`Failed to fetch nav links: ${error.message}`);
   return data;
-}
+});
 
-export async function getSocialLinks(): Promise<SocialLink[]> {
+export const getSocialLinks = cache(async (): Promise<SocialLink[]> => {
   const { data, error } = await supabase
     .from("social_links")
     .select("label, href, icon")
@@ -39,9 +40,9 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
 
   if (error) throw new Error(`Failed to fetch social links: ${error.message}`);
   return data as SocialLink[];
-}
+});
 
-export async function getProjects(): Promise<Project[]> {
+export const getProjects = cache(async (): Promise<Project[]> => {
   const { data, error } = await supabase
     .from("projects")
     .select(`
@@ -76,9 +77,9 @@ export async function getProjects(): Promise<Project[]> {
       .sort((a, b) => a.sort_order - b.sort_order)
       .map(({ label, href }) => ({ label, href })),
   }));
-}
+});
 
-export async function getAchievements(): Promise<Achievement[]> {
+export const getAchievements = cache(async (): Promise<Achievement[]> => {
   const { data, error } = await supabase
     .from("achievements")
     .select("title, description, year, location, latitude, longitude, image_url")
@@ -86,9 +87,9 @@ export async function getAchievements(): Promise<Achievement[]> {
 
   if (error) throw new Error(`Failed to fetch achievements: ${error.message}`);
   return data;
-}
+});
 
-export async function getTechStack(): Promise<TechStack[]> {
+export const getTechStack = cache(async (): Promise<TechStack[]> => {
   const { data, error } = await supabase
     .from("tech_stack")
     .select("name, category, icon_url")
@@ -96,9 +97,9 @@ export async function getTechStack(): Promise<TechStack[]> {
 
   if (error) throw new Error(`Failed to fetch tech stack: ${error.message}`);
   return data as TechStack[];
-}
+});
 
-export async function getRecommendations(): Promise<Recommendation[]> {
+export const getRecommendations = cache(async (): Promise<Recommendation[]> => {
   const { data, error } = await supabase
     .from("recommendations")
     .select("name, role, company, avatar_url, quote")
@@ -106,9 +107,9 @@ export async function getRecommendations(): Promise<Recommendation[]> {
 
   if (error) throw new Error(`Failed to fetch recommendations: ${error.message}`);
   return data;
-}
+});
 
-export async function getPublications(): Promise<Publication[]> {
+export const getPublications = cache(async (): Promise<Publication[]> => {
   const { data, error } = await supabase
     .from("publications")
     .select("title, authors, journal, conference, year, abstract, doi, url, tags")
@@ -116,9 +117,9 @@ export async function getPublications(): Promise<Publication[]> {
 
   if (error) throw new Error(`Failed to fetch publications: ${error.message}`);
   return data;
-}
+});
 
-export async function getCertifications(): Promise<Certification[]> {
+export const getCertifications = cache(async (): Promise<Certification[]> => {
   const { data, error } = await supabase
     .from("certifications")
     .select("title, issuer, date_issued, credential_url, description, image_url")
@@ -126,4 +127,4 @@ export async function getCertifications(): Promise<Certification[]> {
 
   if (error) throw new Error(`Failed to fetch certifications: ${error.message}`);
   return data;
-}
+});
