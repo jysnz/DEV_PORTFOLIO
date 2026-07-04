@@ -37,14 +37,14 @@ export function Navbar({ navLinks, siteName, className }: NavbarProps) {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         scrolled
-          ? "bg-paper-bg/95 backdrop-blur-md border-b border-line/50"
+          ? "bg-paper-bg/95 backdrop-blur-md"
           : "bg-transparent",
         className
       )}
     >
       <nav
         aria-label="Main navigation"
-        className="flex items-center justify-between px-6 md:px-[60px] py-6 max-w-[1440px] mx-auto"
+        className="flex items-center justify-between px-6 md:px-[60px] py-3 max-w-[1440px] mx-auto"
       >
         <a
           href="#home"
@@ -56,7 +56,7 @@ export function Navbar({ navLinks, siteName, className }: NavbarProps) {
         {/* Desktop nav */}
         <ul className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (
-            <li key={link.href}>
+            <li key={`desktop-${link.href}`}>
               <a
                 href={link.href}
                 className="group relative text-ink-muted font-body font-medium text-base leading-relaxed transition-colors duration-150 hover:text-ink"
@@ -110,7 +110,7 @@ export function Navbar({ navLinks, siteName, className }: NavbarProps) {
         <div className="bg-paper-bg/95 backdrop-blur-md border-t border-line/50">
           <ul className="flex flex-col px-6 py-4 gap-1">
             {navLinks.map((link) => (
-              <li key={link.href}>
+              <li key={`mobile-${link.href}`}>
                 <a
                   href={link.href}
                   onClick={() => setIsOpen(false)}
@@ -123,6 +123,8 @@ export function Navbar({ navLinks, siteName, className }: NavbarProps) {
           </ul>
         </div>
       </div>
+
+
     </header>
   );
 }

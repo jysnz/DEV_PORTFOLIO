@@ -50,7 +50,7 @@ export function Hero({ siteConfig, socialLinks }: HeroProps) {
             <div className="flex items-center gap-4 flex-wrap">
               <Button href="#contact">Contact Me</Button>
               {socialLinks.map((link) => (
-                <IconButton key={link.icon} href={link.href} label={link.label}>
+                <IconButton key={link.href} href={link.href} label={link.label}>
                   {link.icon === "linkedin" ? <LinkedInIcon /> : <GitHubIcon />}
                 </IconButton>
               ))}
