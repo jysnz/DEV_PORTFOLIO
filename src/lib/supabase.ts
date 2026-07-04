@@ -8,7 +8,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     fetch: (url, options = {}) => {
       return fetch(url, {
         ...options,
-        next: { revalidate: 3600 }, // Cache responses for 1 hour
+        cache: "force-cache", // Cache indefinitely, invalidated by revalidatePath
       });
     },
   },

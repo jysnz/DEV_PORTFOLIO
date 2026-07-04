@@ -23,8 +23,8 @@ import {
 } from "@/components/skeletons/SectionSkeleton";
 import { getSiteConfig, getNavLinks, getSocialLinks } from "@/lib/queries";
 
-// ISR: revalidate every hour instead of force-dynamic
-export const revalidate = 3600;
+// Cache indefinitely — invalidated on-demand via /api/revalidate when data changes
+export const revalidate = false;
 
 export default async function Home() {
   // Fetch only critical above-the-fold data eagerly (navbar + hero)
