@@ -73,16 +73,16 @@ src/
 
 ```
 No data changes → Serve cached page indefinitely (0ms response)
-Data inserted/updated/deleted → Supabase trigger → webhook → cache invalidated → next visitor gets fresh data
+Data changed → Supabase trigger → webhook → cache invalidated → next visitor gets fresh data
 ```
 
 | Optimization | Implementation |
 |---|---|
-| **ISR with on-demand revalidation** | `revalidate = false` + `/api/revalidate` endpoint |
-| **React.cache()** | All Supabase queries deduplicated per render pass |
+| **On-demand revalidation** | Page cache stays indefinitely until data changes |
+| **React.cache()** | All queries deduplicated per render pass |
 | **Suspense streaming** | Only navbar + hero block render; 8 sections stream independently |
-| **fetch force-cache** | Supabase responses cached at fetch level |
-| **Database webhooks** | pg_net triggers on all 13 tables call revalidation endpoint |
+| **Fetch caching** | Supabase responses cached at fetch level |
+| **Database webhooks** | pg_net triggers on all content tables call revalidation endpoint |
 | **BlurImage** | Lazy loading + shimmer skeleton + opacity fade-in |
 | **next/image** | Automatic size optimization, format conversion |
 | **next/font** | Zero layout shift, font-display: swap |
@@ -105,91 +105,21 @@ The app logs performance data to the server console:
 │ 🟢 [CACHED]  achievements       1.5ms
 ```
 
----
+When data is updated:
 
-## Database Schema
-
-All content is stored in Supabase PostgreSQL:
-
-| Table | Description |
-|-------|-------------|
-| `site_config` | Site name, title, subtitle, email |
-| `nav_links` | Navigation links with sort order |
-| `social_links` | LinkedIn, GitHub links |
-| `projects` | Portfolio projects |
-| `project_info` | Key-value project details |
-| `project_links` | Demo/GitHub links per project |
-| `project_repositories` | Multiple repo links per project |
-| `project_tech_stack` | Many-to-many project ↔ tech |
-| `tech_stack` | Technologies with categories and icons |
-| `achievements` | Awards with locations (lat/lng) |
-| `certifications` | Certs with issuer and credentials |
-| `publications` | Research papers with DOI/tags |
-| `recommendations` | Testimonials with avatars |
-| `revalidation_config` | Site URL + secret for webhooks |
-
-### On-Demand Revalidation Flow
-
-```sql
--- Trigger on every content table:
-INSERT/UPDATE/DELETE on any table
-  → notify_cache_invalidation() fires
-  → pg_net sends POST to {site_url}/api/revalidate
-  → Next.js invalidates page cache
-  → Next visitor gets fresh data
 ```
+🔴 CACHE INVALIDATED | UPDATE on "projects" | 2026-07-04T06:04:45.480Z
 
----
+┌─────────────────────────────────────────────────────┐
+│           📊 PAGE RENDER ANALYTICS                  │
+├─────────────────────────────────────────────────────┤
+│ 🔄 FRESH FETCH — cache miss or invalidated          │
+├─────────────────────────────────────────────────────┤
+│ 🟡 Critical path:         320.5ms              │
+└─────────────────────────────────────────────────────┘
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 20+
-- Supabase project (free tier works)
-- GitHub personal access token (for contributions graph)
-
-### Environment Variables
-
-Create `.env.local`:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-GITHUB_TOKEN=your_github_pat
-GITHUB_USERNAME=your_github_username
-REVALIDATION_SECRET=your_random_secret_string
-```
-
-### Development
-
-```bash
-npm install
-npm run dev
-```
-
-> Note: Caching is disabled in dev mode. All fetches are fresh.
-
-### Production (local test)
-
-```bash
-npm run build
-npx next start
-```
-
-### Deploy
-
-Push to GitHub → auto-deploys on Vercel.
-
-### Configure Webhooks
-
-After deploying, run in Supabase SQL Editor:
-
-```sql
-UPDATE revalidation_config
-SET site_url = 'https://your-domain.vercel.app',
-    revalidation_secret = 'your-REVALIDATION_SECRET-value'
-WHERE id = 1;
+│ 🔴 [FRESH]  projects         809.2ms  █████████████████████
+│ 🟡 [FRESH]  techStack        459.3ms  ████████████
 ```
 
 ---
@@ -202,6 +132,36 @@ WHERE id = 1;
 - **Borders:** rough.js hand-drawn SVG rectangles with hover emphasis
 - **Cursors:** Custom pencil SVG cursors
 - **Dark mode:** CSS custom properties swap all colors
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- Supabase project (free tier works)
+- GitHub personal access token (for contributions graph)
+
+### Development
+
+```bash
+npm install
+npm run dev
+```
+
+> Caching is disabled in dev mode. All fetches are fresh.
+
+### Production (local test)
+
+```bash
+npm run build
+npx next start
+```
+
+### Deploy
+
+Push to GitHub → auto-deploys on Vercel.
 
 ---
 
