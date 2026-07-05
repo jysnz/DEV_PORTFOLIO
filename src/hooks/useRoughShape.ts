@@ -93,5 +93,5 @@ export function useRoughShape<T extends HTMLElement = HTMLElement>({
     };
   }, [draw]);
 
-  return { containerRef, svgRef, emphasisSvgRef, ready };
+  return { containerRef, svgRef, emphasisSvgRef, ready, redraw: draw };
 }

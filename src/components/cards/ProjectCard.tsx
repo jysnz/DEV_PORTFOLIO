@@ -14,10 +14,11 @@ import type { Project } from "@/lib/types";
 
 export interface ProjectCardProps {
   project: Project;
+  priority?: boolean;
   className?: string;
 }
 
-export function ProjectCard({ project, className }: ProjectCardProps) {
+export function ProjectCard({ project, priority = false, className }: ProjectCardProps) {
   const { containerRef, svgRef, emphasisSvgRef, ready } = useRoughShape<HTMLElement>({
     radius: 12,
     withEmphasis: true,
@@ -43,6 +44,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
             alt={project.title}
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             containerClassName="w-full h-full"
+            priority={priority}
           />
         ) : (
           <div className="flex items-center justify-center w-full h-full">
